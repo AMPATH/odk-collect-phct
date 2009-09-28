@@ -564,7 +564,8 @@ public class FormHandler {
                     bw.write(new String(data, "UTF-8"));
                     bw.flush();
                     bw.close();
-                 // store used IDs in the Database
+                    
+                    // store used IDs in the Database
                     HCTSharedConstants.saveIDs(path);
                     return true;
 
@@ -615,14 +616,14 @@ public class FormHandler {
         if (!markCompleted) {
             if (c != null && c.getCount() == 0) {
                 fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
-                        FileDbAdapter.STATUS_SAVED);
+                        FileDbAdapter.STATUS_SAVED, HCTSharedConstants.householdId);
             } else {
                 fda.updateFile(instancePath, FileDbAdapter.STATUS_SAVED);
             }
         } else {
             if (c != null && c.getCount() == 0) {
                 fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
-                        FileDbAdapter.STATUS_COMPLETED);
+                        FileDbAdapter.STATUS_COMPLETED, HCTSharedConstants.householdId);
 
             } else {
                 fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETED);

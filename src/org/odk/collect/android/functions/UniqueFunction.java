@@ -65,6 +65,8 @@ public class UniqueFunction implements IFunctionHandler {
 			
 			if (idType.equals(HCTSharedConstants.INDIVIDUAL))
 				HCTSharedConstants.currentIndividual=fullID;
+			if (idType.equals(HCTSharedConstants.HOUSEHOLD))
+				HCTSharedConstants.householdId="Household: " + id;
 			return true;
 		}
 		

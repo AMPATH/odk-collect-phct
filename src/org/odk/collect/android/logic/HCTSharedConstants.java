@@ -43,6 +43,7 @@ public class HCTSharedConstants {
 	 */
 	public static List<String> tempIDs;
 	public static String currentIndividual = null;
+	public static String householdId= null;
 	public static String householdHeadId = null;
 
 	public static Context dbCtx;
@@ -88,9 +89,15 @@ public class HCTSharedConstants {
 			if (table.equals(INDIVIDUAL))
 				mDbAdapter.insertID(table, id, strTemp);
 		}
-		
-		if (reviews != null)
-			reviews.clear();
 		mDbAdapter.close();
+	}
+	
+	public static void cleanUp(){
+		if (tempIDs != null) tempIDs.clear();
+		if (tempDB != null) tempDB.clear();
+		if (reviews != null) reviews.clear();
+		currentIndividual=null;
+		householdHeadId=null;
+		householdId=null;		
 	}
 }

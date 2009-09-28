@@ -169,7 +169,7 @@ public class FileDbAdapter {
      * @param status status of the file
      * @return id of the new file
      */
-    public long createFile(String path, String type, String status) {
+    public long createFile(String path, String type, String status, String display) {
 
         File f = new File(path);
         ContentValues cv = new ContentValues();
@@ -182,7 +182,10 @@ public class FileDbAdapter {
         cv.put(KEY_HASH, FileUtils.getMd5Hash(f));
 
         // first row of the row display
-        cv.put(KEY_DISPLAY, generateDisplay(f.getAbsolutePath(), type));
+        if (display==null || display=="")
+        	cv.put(KEY_DISPLAY, generateDisplay(f.getAbsolutePath(), type));
+        else
+        	cv.put(KEY_DISPLAY, display);
 
         // second row of the row display
         cv.put(KEY_META, generateMeta(f.lastModified()));
@@ -459,7 +462,7 @@ public class FileDbAdapter {
 
                         // add this raw form
                         createFile(formPath, FileDbAdapter.TYPE_FORM,
-                                FileDbAdapter.STATUS_AVAILABLE);
+                                FileDbAdapter.STATUS_AVAILABLE, null);
 
                     }
                 }
