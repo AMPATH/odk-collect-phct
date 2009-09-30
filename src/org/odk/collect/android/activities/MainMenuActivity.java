@@ -48,6 +48,7 @@ public class MainMenuActivity extends Activity {
     private static final int FORM_CHOOSER = 0;
     private static final int INSTANCE_CHOOSER_TABS = 1;
     private static final int INSTANCE_UPLOADER = 2;
+    private static final int MANAGE_FORMS = 3;
 
     // menu options
     public static final int MENU_PREFERENCES = Menu.FIRST;
@@ -148,8 +149,8 @@ public class MainMenuActivity extends Activity {
         mManageFilesButton = (Button) findViewById(R.id.manage_forms);
         mManageFilesButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), FileManagerTabs.class);
-                startActivity(i);
+                Intent i = new Intent(getApplicationContext(), AdminAuthenticateActivity.class);
+                startActivityForResult(i, MANAGE_FORMS);
             }
         });
 
@@ -189,6 +190,10 @@ public class MainMenuActivity extends Activity {
                 i.putExtra(GlobalConstants.KEY_INSTANCEPATH, instancePath);
                 startActivity(i);
                 break;
+            case MANAGE_FORMS:
+            	i = new Intent(getApplicationContext(), FileManagerTabs.class);
+                startActivity(i);
+            	
             default:
                 break;
         }

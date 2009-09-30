@@ -20,7 +20,11 @@ import java.util.List;
 
 import org.odk.collect.android.database.HCTDbAdapter;
 
+import android.app.ListActivity;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.CursorWindow;
+import android.database.sqlite.SQLiteCursor;
 
 /**
  * The constants used in AMPATH HCT Implementation.
@@ -31,17 +35,16 @@ import android.content.Context;
 public class HCTSharedConstants {
 
 	public static List<String> reviews = null;
-	public static List<String> tempDB = null;
+	public static List<String> tempDB = null;	
+	//temporary storage for current entered ID to prevent double entry of IDs
+	public static List<String> tempIDs;
+	
 	private static HCTDbAdapter mDbAdapter;
 
 	public static final String HOUSEHOLD = "household";
 	public static final String INDIVIDUAL = "individual";
 	public static final String HOUSEHEAD = "HeadID";
 
-	/**
-	 * temporary storage for current entered ID to prevent double entry of IDs
-	 */
-	public static List<String> tempIDs;
 	public static String currentIndividual = null;
 	public static String householdId= null;
 	public static String householdHeadId = null;
@@ -49,13 +52,13 @@ public class HCTSharedConstants {
 	public static Context dbCtx;
 	public static Context alertCtx;
 
-	/**
-	 * Special files storage path
-	 */
+	// Special files storage path
 	public static final String SPECIAL_FILES_PATH = "/sdcard/odk/specialfiles/";
 
-	// TODO: silly hack
+	//TODO variables for unique function 
+	//Need a better way of doing this 
 	public static boolean savedForm = false;
+	public static boolean finalizing = false;
 
 	/**
 	 * Saves entered IDs to database to avoid double entry
@@ -74,7 +77,7 @@ public class HCTSharedConstants {
 				strTemp = tempIDs.get(i);
 		}
 
-		// And then write the ids into the database.
+		// And then write the id's into the database.
 		for (int i = 0; i < tempIDs.size(); i++) {
 			String table = tempIDs.get(i).substring(0,
 					tempIDs.get(i).indexOf(","));
@@ -98,6 +101,34 @@ public class HCTSharedConstants {
 		if (reviews != null) reviews.clear();
 		currentIndividual=null;
 		householdHeadId=null;
-		householdId=null;		
+		householdId=null;
+		savedForm=false;
+		finalizing=false;
+	}
+	
+	/**
+	 * @return String[], all persons IDs in this household
+	 */
+	public static String getPeopleInHousehold() {
+		// Get all the people in specified household
+		String household_id = householdId==null?null:householdId.substring(householdId.indexOf(":") + 1);
+		String hctIDs;
+		HCTDbAdapter mDbAdapter = new HCTDbAdapter(dbCtx);
+		mDbAdapter.open();
+		Cursor mIDCursor = mDbAdapter.getHCTIDs(household_id.trim());
+		mDbAdapter.close();
+		ListActivity lstActivity = new ListActivity();
+		lstActivity.startManagingCursor(mIDCursor);
+		if (mIDCursor!=null){
+			SQLiteCursor liteCursor = (SQLiteCursor) mIDCursor;
+			CursorWindow cw = new CursorWindow(true);
+			liteCursor.fillWindow(0, cw);
+			hctIDs="";
+			for (int i = 0; i < cw.getNumRows(); i++) {
+				hctIDs = hctIDs + cw.getString(i, 1) + "\n";
+			}
+		}else 
+			hctIDs="No persons in household";
+		return hctIDs;
 	}
 }

@@ -31,7 +31,7 @@ public class GlobalConstants {
     public static final int IMAGE_CAPTURE = 1;
 
     /**
-     * Request code for returning image capture data from camera intent.
+     * Request code for returning barcode capture data from camera intent.
      */
     public static final int BARCODE_CAPTURE = 2;
 

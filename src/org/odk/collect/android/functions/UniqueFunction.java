@@ -49,9 +49,20 @@ public class UniqueFunction implements IFunctionHandler {
     private  boolean confirmNewID(String idType, String id){
     	String fullID=idType + "," + id;
     	
-    	//TODO: Need a better way of doing this
+    	//TODO: Need a better way of doing this two checks
+    	
     	//A saved form: No need checking
-    	if (HCTSharedConstants.savedForm)
+    	if (HCTSharedConstants.savedForm) {
+    		if (idType.equals(HCTSharedConstants.INDIVIDUAL))
+				HCTSharedConstants.currentIndividual=fullID;
+			if (idType.equals(HCTSharedConstants.HOUSEHOLD))
+				HCTSharedConstants.householdId="Household: " + id;
+    		return true;
+    	}
+    		
+    	
+    	//Finalizing a form: No need checking
+    	if (HCTSharedConstants.finalizing)
     		return true;
     	
     	mDbAdapter=new HCTDbAdapter(HCTSharedConstants.dbCtx);
@@ -59,7 +70,7 @@ public class UniqueFunction implements IFunctionHandler {
 
 		// Confirm if this is a new id
 		// if new id: push into temp and if individual: set as current individual
-		if (mDbAdapter.confirmNewID(idType,id) && confirmInTemp(fullID,idType) && !editingID(fullID)){
+		if (mDbAdapter.confirmNewID(idType,id) && !inTemp(fullID) && !editingID(fullID)){
 			HCTSharedConstants.tempIDs.add(fullID);
 			mDbAdapter.close();
 			
@@ -74,8 +85,8 @@ public class UniqueFunction implements IFunctionHandler {
 		 * Clear the id from temp since save will store it again
 		 */
 		else if (editingID(fullID)) {
-			System.out.println("editing id");
-			HCTSharedConstants.tempIDs.remove(HCTSharedConstants.tempIDs.indexOf(fullID));
+			if (inTemp(fullID))
+				HCTSharedConstants.tempIDs.remove(HCTSharedConstants.tempIDs.indexOf(fullID));
 			HCTSharedConstants.currentIndividual=null;
 			mDbAdapter.close();
 			return true;
@@ -101,12 +112,10 @@ public class UniqueFunction implements IFunctionHandler {
      * @param id
      * @return
      */
-    private boolean confirmInTemp(String id, String idType){
-    	if (idType.equals(HCTSharedConstants.INDIVIDUAL)) {
-	    	if (HCTSharedConstants.tempIDs.contains(id))
-	    		return false;
-    	}
+    private boolean inTemp(String id){
+    	if (HCTSharedConstants.tempIDs.contains(id))
+    		return true;
     	
-    	return true;
+    	return false;
     }
 }

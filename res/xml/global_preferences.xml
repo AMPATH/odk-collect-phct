@@ -1,20 +1,37 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<EditTextPreference android:id="@+id/server"
-		android:key="server" android:defaultValue="@string/default_server"
-		android:title="@string/server" android:dialogTitle="@string/change_server" />
+	<EditTextPreference 
+		android:id="@+id/server"
+		android:key="server" 
+		android:defaultValue="@string/default_server"
+		android:title="@string/server" 
+		android:dialogTitle="@string/change_server" />
 
-	<EditTextPreference android:id="@+id/username"
-		android:key="username" android:defaultValue="" android:title="@string/username"
-		android:dialogTitle="@string/change_user" android:enabled="true" />
+	<EditTextPreference 
+		android:id="@+id/username"
+		android:key="username" 
+		android:defaultValue="" 
+		android:title="@string/username"
+		android:dialogTitle="@string/change_user" 
+		android:enabled="true" />
 
-	<EditTextPreference android:id="@+id/password"
+	<EditTextPreference 
+		android:id="@+id/password"
 		android:key="password" 
 		android:defaultValue="" 
 		android:title="@string/password"
 		android:password="true" 
 		android:dialogTitle="@string/change_password"
 		android:summary="@string/change_password_summary"
+		android:enabled="true" />
+		
+	<EditTextPreference 
+		android:id="@+id/admin_password"
+		android:key="admin_password" 
+		android:defaultValue="hctPassword" 
+		android:title="@string/admin_password"
+		android:password="true"
+		android:dialogTitle="@string/change_admin_password" 
 		android:enabled="true" />
 
 </PreferenceScreen>

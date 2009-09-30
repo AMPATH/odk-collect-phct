@@ -94,6 +94,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	private static final int MENU_SAVE = Menu.FIRST + 5;
 	private static final int MENU_COMPLETE = Menu.FIRST + 6;
 	public static final int MENU_HELP_TEXT = Menu.FIRST + 7;
+	public static final int MENU_HCT_INDIVIDUALS = Menu.FIRST + 8;
+	
 
 	private static final int PROGRESS_DIALOG = 1;
 
@@ -290,6 +292,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		menu.removeItem(MENU_HIERARCHY_VIEW);
 		menu.removeItem(MENU_SUBMENU);
 		menu.removeItem(MENU_HELP_TEXT);
+		menu.removeItem(MENU_HCT_INDIVIDUALS);
 
 		//
 		MenuItem mi = null;
@@ -317,19 +320,21 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 			menu.add(0, MENU_HIERARCHY_VIEW, 0,
 					getString(R.string.view_hierarchy)).setIcon(
-					R.drawable.ic_menu_goto).setEnabled(false);
+					R.drawable.ic_menu_goto).setVisible(false);
 			menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer))
 					.setIcon(android.R.drawable.ic_menu_close_clear_cancel)
 					.setEnabled(!mFormHandler.currentPrompt().isReadonly());
 			menu.add(0, MENU_DELETE_REPEAT, 0,
 					getString(R.string.delete_repeat)).setIcon(
-					R.drawable.ic_menu_clear_playlist).setEnabled(
+					R.drawable.ic_menu_clear_playlist).setVisible(
 					mFormHandler.currentPrompt().isInRepeatableGroup());
 			menu.add(0, MENU_HELP_TEXT, 0, getString(R.string.help_text))
-					.setIcon(android.R.drawable.ic_menu_help).setEnabled(
+					.setIcon(android.R.drawable.ic_menu_help).setVisible(
 							mFormHandler.currentPrompt().getHelpText() != null
-									&& mFormHandler.currentPrompt()
-											.getHelpText().length() > 100);
+									&& mFormHandler.currentPrompt().getHelpText().length() > 100);
+			menu.add(0, MENU_HCT_INDIVIDUALS, 0, getString(R.string.hct_individuals))
+					.setIcon(R.drawable.ic_menu_individuals).setVisible(HCTSharedConstants.savedForm 
+							&& HCTSharedConstants.householdId != null);
 		}
 		return true;
 	}
@@ -360,10 +365,13 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		case MENU_HIERARCHY_VIEW:
 			Intent i = new Intent(this, FormHierarchyActivity.class);
 			startActivity(i);
+			return true;
 		case MENU_HELP_TEXT:
 			createHelpDialog();
 			return true;
-		}
+		case MENU_HCT_INDIVIDUALS:
+			createHCTIndividuals();
+	}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -456,9 +464,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				((TextView) startView.findViewById(R.id.description))
 						.setText(getString(
 								R.string.review_data_description,
-								c
-										.getString(c
-												.getColumnIndex(FileDbAdapter.KEY_DISPLAY))));
+								c.getString(c.getColumnIndex(FileDbAdapter.KEY_DISPLAY))));
+				//FOR HCT: Mark this as a form under review
+				HCTSharedConstants.savedForm=true;
 			} else {
 				((TextView) startView.findViewById(R.id.description))
 						.setText(getString(R.string.enter_data_description,
@@ -746,6 +754,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				switch (i) {
 				case DialogInterface.BUTTON1: // yes, repeat
 					mFormHandler.newRepeat();
+					HCTSharedConstants.currentIndividual=null;
 					showNextView();
 					break;
 				case DialogInterface.BUTTON2: // no, no repeat
@@ -818,6 +827,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 * Called during a 'save and exit' command. The form is not 'done' here.
 	 */
 	private boolean saveDataToDisk(boolean markCompleted) {
+		HCTSharedConstants.finalizing=true;
 		if (!validateAnswers(markCompleted)) {
 			return false;
 		}
@@ -916,7 +926,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		String msg = mFormHandler.currentPrompt().getHelpText();
 		msg = msg.replaceAll("\t", "");
 		mAlertDialog.setMessage(msg);
-		DialogInterface.OnClickListener quitListener = new DialogInterface.OnClickListener() {
+		DialogInterface.OnClickListener helpListener = new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int i) {
 				switch (i) {
@@ -926,7 +936,29 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			}
 		};
 		mAlertDialog.setCancelable(false);
-		mAlertDialog.setButton(getString(R.string.ok), quitListener);
+		mAlertDialog.setButton(getString(R.string.ok), helpListener);
+		mAlertDialog.show();
+	}
+	
+	/**
+	 * HCT Individuals dialog
+	 */
+	private void createHCTIndividuals() {
+		mAlertDialog = new AlertDialog.Builder(this).create();
+		String msg = "Persons in Household";
+		mAlertDialog.setTitle(msg);
+		mAlertDialog.setMessage(HCTSharedConstants.getPeopleInHousehold());
+		DialogInterface.OnClickListener listListener = new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int i) {
+				switch (i) {
+				case AlertDialog.BUTTON1:
+					break;
+				}
+			}
+		};
+		mAlertDialog.setCancelable(false);
+		mAlertDialog.setButton(getString(R.string.ok), listListener);
 		mAlertDialog.show();
 	}
 
@@ -1173,5 +1205,5 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			refreshCurrentView();
 		}
 	}
-
+	
 }

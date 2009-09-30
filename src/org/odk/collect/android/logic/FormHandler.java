@@ -565,7 +565,7 @@ public class FormHandler {
                     bw.flush();
                     bw.close();
                     
-                    // store used IDs in the Database
+                    // FOR HCT store used IDs in the Database
                     HCTSharedConstants.saveIDs(path);
                     return true;
 
@@ -635,6 +635,9 @@ public class FormHandler {
         }
 
         fda.close();
+        
+        // FOR HCT CleanUp
+        HCTSharedConstants.cleanUp();
         return true;
 
 

@@ -180,8 +180,8 @@ public class HCTDbAdapter {
      */
     public Cursor getHCTIDs(String household_id) {
     	Cursor mCursor = null;
-    	mCursor= mDb.query(true, HCTSharedConstants.INDIVIDUAL, new String[] {KEY_ROWID, KEY_ID}, KEY_HOUSEHOLD_ID + " like'" + household_id + "'", null, null, null, null, null);
-        if (mCursor.getCount()<1){
+    	mCursor= mDb.query(true, HCTSharedConstants.INDIVIDUAL, new String[] {KEY_ROWID, KEY_ID}, KEY_HOUSEHOLD_ID + " like '" + household_id + "'", null, null, null, null, null);
+    	if (mCursor.getCount()<1){
         	mCursor.close();
         	return null;
         }
