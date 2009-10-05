@@ -29,7 +29,8 @@ import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.GlobalPreferences;
+import org.odk.collect.android.logic.HCTSharedConstants;
+import org.odk.collect.android.preferences.ServerPreferences;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 
 import android.app.Activity;
@@ -70,9 +71,9 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         }
         
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String url = settings.getString(GlobalPreferences.KEY_SERVER, getString(R.string.default_server));
-        String authCredentials = settings.getString(GlobalPreferences.KEY_USERNAME, getString(R.string.username)) + 
-    			":" + settings.getString(GlobalPreferences.KEY_PASSWORD, getString(R.string.password));
+        String url = settings.getString(ServerPreferences.KEY_SERVER, getString(R.string.default_server));
+        String authCredentials = settings.getString(ServerPreferences.KEY_USERNAME, getString(R.string.username)) + 
+    			":" + settings.getString(ServerPreferences.KEY_PASSWORD, getString(R.string.password));
         
         if (authenticate(url,authCredentials)){
 	        mInstanceUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
@@ -81,7 +82,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
 	            // setup dialog and upload task
 	            showDialog(PROGRESS_DIALOG);
 	            mInstanceUploaderTask = new InstanceUploaderTask();
-	            mInstanceUploaderTask.setUploadServer(url + "/ProcessFileUpload.jsp");
+	            mInstanceUploaderTask.setUploadServer(url + "/" + HCTSharedConstants.UPLOADER_FILE);
 	            mInstanceUploaderTask.setAuthCredentials(authCredentials);
 	            totalCount = instances.size();
 	            

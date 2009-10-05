@@ -246,16 +246,9 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
 	}
 
 
-	public void setFocus() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 	@Override
 	public void setFocus(Context context) {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

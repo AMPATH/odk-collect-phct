@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.preferences.ServerPreferences;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -44,6 +45,7 @@ import android.widget.SimpleCursorAdapter;
 public class InstanceUploaderList extends ListActivity {
 
     private static final int MENU_UPLOAD_ALL = Menu.FIRST;
+    private static final int MENU_PREFS=Menu.FIRST + 1;
 
     private SimpleCursorAdapter mInstances;
 
@@ -118,6 +120,8 @@ public class InstanceUploaderList extends ListActivity {
         super.onCreateOptionsMenu(menu);
         menu.add(0, MENU_UPLOAD_ALL, 0, R.string.send_data).setIcon(
                 R.drawable.ic_menu_send);
+        menu.add(0, MENU_PREFS, 0, getString(R.string.server_preferences)).setIcon(
+                android.R.drawable.ic_menu_preferences);
         return true;
     }
 
@@ -128,11 +132,18 @@ public class InstanceUploaderList extends ListActivity {
             case MENU_UPLOAD_ALL:
                 uploadAllData();
                 return true;
+            case MENU_PREFS:
+                createPreferencesMenu();
+                return true;
         }
         return super.onMenuItemSelected(featureId, item);
     }
 
-
+    private void createPreferencesMenu() {
+        Intent i = new Intent(this, ServerPreferences.class);
+        startActivity(i);
+    }
+    
     @Override
     protected void onResume() {
         super.onResume();

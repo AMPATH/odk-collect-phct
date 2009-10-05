@@ -54,6 +54,9 @@ public class HCTSharedConstants {
 
 	// Special files storage path
 	public static final String SPECIAL_FILES_PATH = "/sdcard/odk/specialfiles/";
+	
+	// Uploader File 
+	public static final String UPLOADER_FILE = "ProcessFileUpload.jsp";
 
 	//TODO variables for unique function 
 	//Need a better way of doing this 

@@ -28,7 +28,7 @@
 	<EditTextPreference 
 		android:id="@+id/admin_password"
 		android:key="admin_password" 
-		android:defaultValue="hctPassword" 
+		android:defaultValue="@string/default_admin_password" 
 		android:title="@string/admin_password"
 		android:password="true"
 		android:dialogTitle="@string/change_admin_password" 

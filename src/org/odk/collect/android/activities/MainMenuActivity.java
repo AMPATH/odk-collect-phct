@@ -30,7 +30,7 @@ import android.widget.Toast;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.GlobalPreferences;
+import org.odk.collect.android.preferences.ServerPreferences;
 import org.odk.collect.android.utilities.FileUtils;
 
 import java.util.ArrayList;
@@ -265,7 +265,7 @@ public class MainMenuActivity extends Activity {
 
 
     private void createPreferencesMenu() {
-        Intent i = new Intent(this, GlobalPreferences.class);
+        Intent i = new Intent(this, ServerPreferences.class);
         startActivity(i);
     }
 

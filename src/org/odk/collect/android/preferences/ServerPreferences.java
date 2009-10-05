@@ -19,7 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-public class GlobalPreferences extends PreferenceActivity implements
+public class ServerPreferences extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
 
     public static String KEY_SERVER = "server";
@@ -27,7 +27,7 @@ public class GlobalPreferences extends PreferenceActivity implements
     public static String KEY_PASSWORD = "password";
     public static String KEY_ADMIN_PASSWORD = "admin_password";
     private static String adminPassword;
-    private static boolean editAdminPassword=false;
+    private static boolean pressedCancel=false;
     private SharedPreferences sp;
 
     @Override
@@ -87,8 +87,11 @@ public class GlobalPreferences extends PreferenceActivity implements
         } else if (key.equals(KEY_PASSWORD)) {
             updatePassword();
         } else if (key.equals(KEY_ADMIN_PASSWORD)){
-        	if (adminPassword != null && !editAdminPassword)
-        		updateAdminPassword();
+        	if (adminPassword != null)
+        		if (!pressedCancel)
+        			updateAdminPassword();
+        		else
+        			pressedCancel=false;
         }
     }
 
@@ -120,7 +123,6 @@ public class GlobalPreferences extends PreferenceActivity implements
     
  
     private void updateAdminPassword() {
-    	editAdminPassword=false;
     	final FrameLayout fl = new FrameLayout(this);
     	final EditText input = new EditText(this);
 
@@ -134,24 +136,24 @@ public class GlobalPreferences extends PreferenceActivity implements
     	          public void onClick(DialogInterface d, int which) {
     	               d.dismiss();
     	               if (adminPassword.equals(input.getText().toString()))
-    	            	   Toast.makeText(GlobalPreferences.this, "Admin password successfully changed!!", Toast.LENGTH_SHORT).show();
+    	            	   Toast.makeText(ServerPreferences.this, "Admin password successfully changed!!", Toast.LENGTH_SHORT).show();
     	               else {    
     	            	   SharedPreferences.Editor editor = sp.edit();
                            editor.putString(KEY_ADMIN_PASSWORD, adminPassword);
                            editor.commit();
-                           Toast.makeText(GlobalPreferences.this, "Wrong Password, Admin password was not changed!", Toast.LENGTH_SHORT).show();
+                           Toast.makeText(ServerPreferences.this, "Wrong Password, Admin password was not changed!", Toast.LENGTH_SHORT).show();
     	        		}
     	          }
     	     })
     	     .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
     	          @Override
     	          public void onClick(DialogInterface d, int which) {
-    	        	  editAdminPassword=true;
+    	        	  pressedCancel=true;
     	        	  d.dismiss();
     	        	  SharedPreferences.Editor editor = sp.edit();
     	        	  editor.putString(KEY_ADMIN_PASSWORD, adminPassword);
     	        	  editor.commit();
-    	        	  Toast.makeText(GlobalPreferences.this, "Admin password was not changed!", Toast.LENGTH_SHORT).show();
+    	        	  Toast.makeText(ServerPreferences.this, "Admin password was not changed!", Toast.LENGTH_SHORT).show();
    
     	          }
     	     }).create().show();

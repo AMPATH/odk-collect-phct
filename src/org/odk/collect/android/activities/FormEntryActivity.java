@@ -328,7 +328,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					getString(R.string.delete_repeat)).setIcon(
 					R.drawable.ic_menu_clear_playlist).setVisible(
 					mFormHandler.currentPrompt().isInRepeatableGroup());
-			menu.add(0, MENU_HELP_TEXT, 0, getString(R.string.help_text))
+			menu.add(0, MENU_HELP_TEXT, 0, getString(R.string.get_hint))
 					.setIcon(android.R.drawable.ic_menu_help).setVisible(
 							mFormHandler.currentPrompt().getHelpText() != null
 									&& mFormHandler.currentPrompt().getHelpText().length() > 100);
@@ -501,7 +501,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			((Button) endView.findViewById(R.id.complete_exit_button))
 					.setOnClickListener(new OnClickListener() {
 						public void onClick(View v) {
-							// Form is markd as 'done' here.
+							// Form is marked as 'done' here.
 							if (saveDataToDisk(true))
 								finish();
 						}
@@ -510,7 +510,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			((Button) endView.findViewById(R.id.save_exit_button))
 					.setOnClickListener(new OnClickListener() {
 						public void onClick(View v) {
-							// Form is markd as 'saved' here.
+							// Form is marked as 'saved' here.
 							if (saveDataToDisk(false))
 								finish();
 						}
@@ -1098,8 +1098,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         // we use dispatchKeyEvent because it happens first.
-        // onKeyDown/Up lets all the views have the event first.
-
+        //onKeyDown/Up lets all the views have the event first.
+    	
         if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER
                 && event.getAction() == KeyEvent.ACTION_DOWN) {
             if (event.isShiftPressed())
@@ -1109,6 +1109,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             return true;
         }
         return super.dispatchKeyEvent(event);
+ 
     }
     
     

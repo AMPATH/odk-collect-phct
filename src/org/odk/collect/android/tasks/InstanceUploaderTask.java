@@ -75,12 +75,12 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
             HttpConnectionParams.setConnectionTimeout(params, GlobalConstants.CONNECTION_TIMEOUT);
             HttpConnectionParams.setSoTimeout(params, GlobalConstants.CONNECTION_TIMEOUT);
             HttpClientParams.setRedirecting(params, false);
+            params.setParameter("http.useragent","hct's android (ODK collect) file uploads");
 
             // setup client
             DefaultHttpClient httpclient = new DefaultHttpClient(params);
             HttpPost httppost = new HttpPost(mUrl);
-            
-             byte[] bytes = mAuthCredentials.getBytes();
+            byte[] bytes = mAuthCredentials.getBytes();
     		httppost.setHeader("Authorization", "Basic " + new String(Base64.encodeBase64(bytes)));
 
             // get instance file
@@ -108,7 +108,7 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
                 } else {
                     Log.e(t, "unsupported file type, not adding file: " + f.getName());
                 }
-            }
+            } 
             httppost.setEntity(entity);
 
             // prepare response and return uploaded
@@ -125,7 +125,8 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
                 e.printStackTrace();
                 return uploadedIntances;
             }
-
+            
+            System.out.println(response.getStatusLine().toString());
             // check response.
             // TODO: This isn't handled correctly.
             String serverLocation = null;
