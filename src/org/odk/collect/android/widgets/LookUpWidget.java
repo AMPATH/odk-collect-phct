@@ -64,7 +64,7 @@ public class LookUpWidget extends LinearLayout implements IQuestionWidget {
         mStringAnswer = new TextView(getContext());
         mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, GlobalConstants.APPLICATION_FONTSIZE);
         
-        String s = prompt.getAnswerText();
+        String s = (String) prompt.getAnswerObject();
         if (s != null) {
         	mAutoCompleteView.setText(s.substring(0, s.indexOf(",")));
         	getVillages();
@@ -126,31 +126,31 @@ public class LookUpWidget extends LinearLayout implements IQuestionWidget {
     }
     
     public void setLocations(String item){
-    	String villages="",sublocation="",location="",division="",district="";
+    	String village="",sublocation="",location="",division="",district="";
     	if (al!=null){
 	    	int itemIndex=al.indexOf(item);
 	    	if (itemIndex != -1){
-	    		villages=villageAdapter.get(itemIndex);
+	    		village=villageAdapter.get(itemIndex);
 		    	//First get the district
-	    		if (villages.indexOf(",") != villages.lastIndexOf(",") && villages.indexOf(",")!=-1)
-	    			district = villages.substring(villages.lastIndexOf(",")+1);
+	    		if (village.indexOf(",") != village.lastIndexOf(",") && village.indexOf(",")!=-1)
+	    			district = village.substring(village.lastIndexOf(",")+1);
 		    	
 	    		//then the division
-	    		if (villages.indexOf(",") != villages.lastIndexOf(",") && villages.indexOf(",")!=-1){
-	    			villages=villages.substring(0,villages.lastIndexOf(","));
-	    			division = villages.substring(villages.lastIndexOf(",")+1);
+	    		if (village.indexOf(",") != village.lastIndexOf(",") && village.indexOf(",")!=-1){
+	    			village=village.substring(0,village.lastIndexOf(","));
+	    			division = village.substring(village.lastIndexOf(",")+1);
 	    		}
 		    	
 		    	//then the location
-	    		if (villages.indexOf(",") != villages.lastIndexOf(",") && villages.indexOf(",")!=-1){
-	    			villages=villages.substring(0,villages.lastIndexOf(","));
-	    			location = villages.substring(villages.lastIndexOf(",")+1);
+	    		if (village.indexOf(",") != village.lastIndexOf(",") && village.indexOf(",")!=-1){
+	    			village=village.substring(0,village.lastIndexOf(","));
+	    			location = village.substring(village.lastIndexOf(",")+1);
 	    		}
 		    	
 		    	//then the sublocation
-	    		if (villages.indexOf(",") != villages.lastIndexOf(",") && villages.indexOf(",")!=-1){
-	    			villages=villages.substring(0,villages.lastIndexOf(","));
-		    		sublocation = villages.substring(villages.lastIndexOf(",")+1);
+	    		if (village.indexOf(",") != village.lastIndexOf(",") && village.indexOf(",")!=-1){
+	    			village=village.substring(0,village.lastIndexOf(","));
+		    		sublocation = village.substring(village.lastIndexOf(",")+1);
 	    		}
 	    	}else {
 	    		district=division=location=sublocation="";
