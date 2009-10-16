@@ -349,7 +349,7 @@ public class FileDbAdapter {
      * @param status status of the file
      * @return number of affected rows
      */
-    public boolean updateFile(String path, String status) {
+    public boolean updateFile(String path, String status, String display) {
 
         File f = new File(path);
         ContentValues cv = new ContentValues();
@@ -357,6 +357,9 @@ public class FileDbAdapter {
         cv.put(KEY_FILEPATH, f.getAbsolutePath());
         cv.put(KEY_HASH, FileUtils.getMd5Hash(f));
         cv.put(KEY_STATUS, status);
+        if (display != null && display != "")
+        	cv.put(KEY_DISPLAY, display);
+
         cv.put(KEY_META, generateMeta(new Date().getTime()));
 
         return mDb.update(DATABASE_TABLE, cv, KEY_FILEPATH + "='" + path + "'", null) > 0;

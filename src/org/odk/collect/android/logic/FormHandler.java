@@ -566,7 +566,7 @@ public class FormHandler {
                     bw.close();
                     
                     // FOR HCT store used IDs in the Database
-                    HCTSharedConstants.saveIDs(path);
+                    HCTSharedConstants.saveIDs();
                     return true;
 
                 } catch (IOException e) {
@@ -618,7 +618,7 @@ public class FormHandler {
                 fda.createFile(instancePath, FileDbAdapter.TYPE_INSTANCE,
                         FileDbAdapter.STATUS_SAVED, HCTSharedConstants.householdId);
             } else {
-                fda.updateFile(instancePath, FileDbAdapter.STATUS_SAVED);
+                fda.updateFile(instancePath, FileDbAdapter.STATUS_SAVED, HCTSharedConstants.householdId);
             }
         } else {
             if (c != null && c.getCount() == 0) {
@@ -626,7 +626,7 @@ public class FormHandler {
                         FileDbAdapter.STATUS_COMPLETED, HCTSharedConstants.householdId);
 
             } else {
-                fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETED);
+                fda.updateFile(instancePath, FileDbAdapter.STATUS_COMPLETED, HCTSharedConstants.householdId);
             }
         }
         // clean up cursor

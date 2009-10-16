@@ -45,37 +45,39 @@ public class ReviewWidget extends LinearLayout implements IQuestionWidget {
         String str="",yearOfBirth=null;
         mStringAnswer = new TextView(getContext());
         List<String> s = HCTSharedConstants.reviews;
-        if (!s.isEmpty()) {
-        	ListIterator<String> li=s.listIterator();
-        	String item;
-        	String[] vals;
-        	while (li.hasNext()) {
-        		item=li.next();
-        		vals=item.split(",");
-        		if (vals[0].equalsIgnoreCase("year of birth")){
-        			Double dbl= Double.valueOf(vals[1]);
-        			int ageInMonths=dbl.intValue();
-
-        			Calendar cal = Calendar.getInstance();
-        			cal.setTime(new Date());
-        			
-        			//convert age to days
-        			ageInMonths*=-30;
-        			
-        			// add (actually subtract) number of days
-         			cal.add(Calendar.DATE ,ageInMonths);
-        			Date birthDate = cal.getTime();
-        			
-        			//format the date to meet our requirements,
-        			SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
-        			yearOfBirth = formatter.format(birthDate);
-        			str += vals[0] + " = " + yearOfBirth + "\n";
-        		}
-        		else {
-        			item=item.replace(",", " = ");
-        			str += item + "\n";
-        		}
-        	}
+        if (s != null){
+	        if (!s.isEmpty()) {
+	        	ListIterator<String> li=s.listIterator();
+	        	String item;
+	        	String[] vals;
+	        	while (li.hasNext()) {
+	        		item=li.next();
+	        		vals=item.split(",");
+	        		if (vals[0].equalsIgnoreCase("year of birth")){
+	        			Double dbl= Double.valueOf(vals[1]);
+	        			int ageInMonths=dbl.intValue();
+	
+	        			Calendar cal = Calendar.getInstance();
+	        			cal.setTime(new Date());
+	        			
+	        			//convert age to days
+	        			ageInMonths*=-30;
+	        			
+	        			// add (actually subtract) number of days
+	         			cal.add(Calendar.DATE ,ageInMonths);
+	        			Date birthDate = cal.getTime();
+	        			
+	        			//format the date to meet our requirements,
+	        			SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+	        			yearOfBirth = formatter.format(birthDate);
+	        			str += vals[0] + " = " + yearOfBirth + "\n";
+	        		}
+	        		else {
+	        			item=item.replace(",", " = ");
+	        			str += item + "\n";
+	        		}
+	        	}
+	        }
          	mStringAnswer.setText(str);
             mStringAnswer.setTextSize(TypedValue.COMPLEX_UNIT_PT, 8);
         }

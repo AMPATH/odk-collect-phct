@@ -320,7 +320,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 
 			menu.add(0, MENU_HIERARCHY_VIEW, 0,
 					getString(R.string.view_hierarchy)).setIcon(
-					R.drawable.ic_menu_goto).setVisible(false);
+					R.drawable.ic_menu_goto).setVisible(true);
 			menu.add(0, MENU_CLEAR, 0, getString(R.string.clear_answer))
 					.setIcon(android.R.drawable.ic_menu_close_clear_cancel)
 					.setEnabled(!mFormHandler.currentPrompt().isReadonly());
@@ -465,8 +465,10 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 						.setText(getString(
 								R.string.review_data_description,
 								c.getString(c.getColumnIndex(FileDbAdapter.KEY_DISPLAY))));
+				
 				//FOR HCT: Mark this as a form under review
 				HCTSharedConstants.savedForm=true;
+				HCTSharedConstants.savedFormName=c.getString(c.getColumnIndex(FileDbAdapter.KEY_DISPLAY));
 			} else {
 				((TextView) startView.findViewById(R.id.description))
 						.setText(getString(R.string.enter_data_description,

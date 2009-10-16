@@ -18,7 +18,6 @@ public class HCTDbAdapter {
 
     public static final String KEY_ID = "id";
     public static final String KEY_HOUSEHOLD_HEAD = "headid";
-    public static final String KEY_HOUSEHOLD_FORM = "formname";
     public static final String KEY_HOUSEHOLD_LOCATION = "location";
     public static final String KEY_HOUSEHOLD_ID = "householdid";
     public static final String KEY_ROWID = "_id";
@@ -35,8 +34,7 @@ public class HCTDbAdapter {
      */
     private static final String TABLE_CREATE_HOUSEHOLD =
     	"create table " + HCTSharedConstants.HOUSEHOLD + " (" + KEY_ROWID + " integer primary key autoincrement, "
-    			+ KEY_ID + " text not null, " + KEY_HOUSEHOLD_HEAD + " text, " + KEY_HOUSEHOLD_FORM + " text, " 
-    			+ KEY_HOUSEHOLD_LOCATION + " text);";
+    			+ KEY_ID + " text not null, " + KEY_HOUSEHOLD_HEAD + " text, " + KEY_HOUSEHOLD_LOCATION + " text);";
     private static final String TABLE_CREATE_HCT =
         "create table " + HCTSharedConstants.INDIVIDUAL + " (" + KEY_ROWID + " integer primary key autoincrement, "
         + KEY_ID + " text not null, " + KEY_HOUSEHOLD_ID + " text not null);";
@@ -118,15 +116,12 @@ public class HCTDbAdapter {
 	 * @param table
 	 * @param id
 	 * @param householdHeadId
-	 * @param path
 	 * @param location
 	 */
-	public void insertID(String tableName, String id, String headId,
-			String formName, String location) {
+	public void insertID(String tableName, String id, String headId, String location) {
 		ContentValues initialValues = new ContentValues();
     	initialValues.put(KEY_ID, id);
     	initialValues.put(KEY_HOUSEHOLD_HEAD, headId);
-    	initialValues.put(KEY_HOUSEHOLD_FORM, formName);
     	initialValues.put(KEY_HOUSEHOLD_LOCATION, location);
     	mDb.insert(tableName, null, initialValues);
 	}
@@ -139,7 +134,7 @@ public class HCTDbAdapter {
      */
     public Cursor getAnyField(String tableName, String id, String fieldName) {
     	Cursor mCursor = null;
-    	mCursor= mDb.query(true, tableName, new String[] {KEY_ROWID, fieldName}, "id like'" + id + "'", null, null, null, null, null);
+    	mCursor= mDb.query(true, tableName, new String[] {KEY_ROWID, fieldName}, KEY_ID + " like '" + id + "'", null, null, null, null, null);
         if (mCursor.getCount()<1){
         	mCursor.close();
         	return null;
@@ -154,9 +149,9 @@ public class HCTDbAdapter {
      * @param rowId id of householdID to delete
      * @return true if deleted, false otherwise
      */
-    public boolean deleteID(String tableName, long rowId) {
+    public boolean deleteID(String tableName, String rowId) {
 
-        return mDb.delete(tableName, KEY_ROWID + "=" + rowId, null) > 0;
+        return mDb.delete(tableName, KEY_ID + " like '" + rowId + "'", null) > 0;
     }
 
     /**

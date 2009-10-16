@@ -45,73 +45,85 @@ public class UniqueFunction implements IFunctionHandler {
 		// Auto-generated method stub
 		return false;
 	}
-    
+	
+	private boolean confirmNewIndividual(String idType, String id){
+		boolean unique=false;
+		String fullId=idType + ": " + id;
+		if (HCTSharedConstants.currentIndividual==null){
+			//A new individual being created
+			if (mDbAdapter.confirmNewID(idType,id) && !inTemp(fullId)){
+				HCTSharedConstants.tempIDs.add(fullId);
+				HCTSharedConstants.currentIndividual=fullId;
+				unique= true;
+			}
+		}
+		else {
+			//probably a swipe back
+			HCTSharedConstants.tempIDs.remove(HCTSharedConstants.currentIndividual);
+			HCTSharedConstants.tempIDs.add(fullId);
+			HCTSharedConstants.currentIndividual=fullId;
+			unique=true;
+		}
+		return unique;
+	}
+	
+	private boolean confirmNewHousehold(String idType, String id){
+		boolean unique=false;
+		String fullId=idType + ": " + id;
+		
+		//if a saved form then current household is one saved in database
+		if (HCTSharedConstants.savedFormName != null && HCTSharedConstants.householdId ==null)
+			HCTSharedConstants.householdId=HCTSharedConstants.savedFormName;
+		
+		if (HCTSharedConstants.householdId==null){
+			//A new household being created
+			if (mDbAdapter.confirmNewID(idType,id) && !inTemp(fullId)){
+				HCTSharedConstants.tempIDs.add(fullId);
+				HCTSharedConstants.householdId=fullId;
+				unique= true;
+			}
+		}
+		else {
+			//probably a swipe back
+			HCTSharedConstants.tempIDs.remove(HCTSharedConstants.householdId);
+			HCTSharedConstants.tempIDs.add(fullId);
+			HCTSharedConstants.householdId=fullId;
+			unique=true;
+		}
+		if (HCTSharedConstants.savedForm && HCTSharedConstants.savedFormName != null){
+			if (!HCTSharedConstants.savedFormName.equalsIgnoreCase(fullId)){
+				String table = HCTSharedConstants.savedFormName.substring(0, HCTSharedConstants.savedFormName.indexOf(":"));
+				String idNum = HCTSharedConstants.savedFormName.substring(HCTSharedConstants.savedFormName.indexOf(":") + 2);
+				if (mDbAdapter.deleteID(table, idNum))
+					unique=true;
+			}else
+				unique=true;
+		}
+		return unique;
+	}
+	
     private  boolean confirmNewID(String idType, String id){
-    	String fullID=idType + "," + id;
-    	
-    	//TODO: Need a better way of doing this two checks
-    	
-    	//A saved form: No need checking
-    	if (HCTSharedConstants.savedForm) {
-    		if (idType.equals(HCTSharedConstants.INDIVIDUAL))
-				HCTSharedConstants.currentIndividual=fullID;
-			if (idType.equals(HCTSharedConstants.HOUSEHOLD))
-				HCTSharedConstants.householdId="Household: " + id;
-    		return true;
-    	}
-    		
     	
     	//Finalizing a form: No need checking
     	if (HCTSharedConstants.finalizing)
     		return true;
     	
+    	//Initialize database connection
     	mDbAdapter=new HCTDbAdapter(HCTSharedConstants.dbCtx);
 		mDbAdapter.open();
-
-		// Confirm if this is a new id
-		// if new id: push into temp and if individual: set as current individual
-		if (mDbAdapter.confirmNewID(idType,id) && !inTemp(fullID) && !editingID(fullID)){
-			HCTSharedConstants.tempIDs.add(fullID);
-			mDbAdapter.close();
-			
-			if (idType.equals(HCTSharedConstants.INDIVIDUAL))
-				HCTSharedConstants.currentIndividual=fullID;
-			if (idType.equals(HCTSharedConstants.HOUSEHOLD))
-				HCTSharedConstants.householdId="Household: " + id;
-			return true;
-		}
 		
-		/* An already existing ID in temp, this means its probably an edit
-		 * Clear the id from temp since save will store it again
-		 */
-		else if (editingID(fullID)) {
-			if (inTemp(fullID))
-				HCTSharedConstants.tempIDs.remove(HCTSharedConstants.tempIDs.indexOf(fullID));
-			HCTSharedConstants.currentIndividual=null;
-			mDbAdapter.close();
-			return true;
-		}
-	
+		//EITHER: confirm new household
+		if (idType.equals(HCTSharedConstants.HOUSEHOLD))
+			return confirmNewHousehold(idType, id);
+		
+		//OR: confirm new individual
+		if (idType.equals(HCTSharedConstants.INDIVIDUAL))
+			return confirmNewIndividual(idType, id);
+    	
 		mDbAdapter.close();
 		return false;
     }
     
-    /**
-     * @param id
-     * @return
-     */
-    private boolean editingID(String id){
-    	if (HCTSharedConstants.currentIndividual != null && 
-    			HCTSharedConstants.currentIndividual.equalsIgnoreCase(id))
-    		return true;
-    	
-    	return false;
-    }
-    
-    /**
-     * @param id
-     * @return
-     */
     private boolean inTemp(String id){
     	if (HCTSharedConstants.tempIDs.contains(id))
     		return true;

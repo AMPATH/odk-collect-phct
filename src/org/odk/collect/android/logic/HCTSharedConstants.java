@@ -61,6 +61,7 @@ public class HCTSharedConstants {
 	//TODO variables for unique function 
 	//Need a better way of doing this 
 	public static boolean savedForm = false;
+	public static String savedFormName = null;
 	public static boolean finalizing = false;
 
 	/**
@@ -68,7 +69,7 @@ public class HCTSharedConstants {
 	 * 
 	 * @param path
 	 */
-	public static void saveIDs(String path) {
+	public static void saveIDs() {
 		String strTemp = "";
 		mDbAdapter = new HCTDbAdapter(dbCtx);
 		mDbAdapter.open();
@@ -83,13 +84,13 @@ public class HCTSharedConstants {
 		// And then write the id's into the database.
 		for (int i = 0; i < tempIDs.size(); i++) {
 			String table = tempIDs.get(i).substring(0,
-					tempIDs.get(i).indexOf(","));
+					tempIDs.get(i).indexOf(":"));
 			String id = tempIDs.get(i).substring(
-					tempIDs.get(i).indexOf(",") + 1);
+					tempIDs.get(i).indexOf(":") + 2);
 
 			if (table.equals(HOUSEHOLD)) {
 				strTemp = id;
-				mDbAdapter.insertID(table, id, householdHeadId, path, null); 
+				mDbAdapter.insertID(table, id, householdHeadId, null); 
 			}
 
 			if (table.equals(INDIVIDUAL))
@@ -106,6 +107,7 @@ public class HCTSharedConstants {
 		householdHeadId=null;
 		householdId=null;
 		savedForm=false;
+		savedFormName=null;
 		finalizing=false;
 	}
 	
