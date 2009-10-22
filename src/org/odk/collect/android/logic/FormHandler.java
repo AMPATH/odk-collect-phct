@@ -38,6 +38,7 @@ import org.javarosa.xform.parse.XFormParser;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.functions.CheckDigitFunction;
 import org.odk.collect.android.functions.ReviewFunction;
+import org.odk.collect.android.functions.StoreValueFunction;
 import org.odk.collect.android.functions.UniqueFunction;
 import org.odk.collect.android.utilities.FileUtils;
 
@@ -81,6 +82,9 @@ public class FormHandler {
         
         //evaluate review a constraint
         ec.addFunctionHandler(new ReviewFunction());
+        
+      //evaluate a store constraint
+        ec.addFunctionHandler(new StoreValueFunction());
         
         mForm.setEvaluationContext(ec);
 

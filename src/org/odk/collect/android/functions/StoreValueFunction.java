@@ -1,14 +1,11 @@
 package org.odk.collect.android.functions;
 
-import java.util.ArrayList;
 import java.util.Vector;
 
 import org.javarosa.core.model.condition.IFunctionHandler;
-import org.odk.collect.android.database.HCTDbAdapter;
 import org.odk.collect.android.logic.HCTSharedConstants;
 
 import android.app.ListActivity;
-import android.database.Cursor;
 
 /**
  * Looks for a "store" call in XForm stores value in DB.
@@ -17,17 +14,14 @@ import android.database.Cursor;
  */
 
 public class StoreValueFunction extends ListActivity implements IFunctionHandler{
-	private static HCTDbAdapter mDbAdapter;
+	//private static HCTDbAdapter mDbAdapter;
 	
 	public Object eval(Object[] args) {
 
-		String tableName = (String) args[0];
-		String id = (String) args [1];
-		String fieldName = (String) args[2];
-		String fieldValue = (String) args[3];
-		String extra = (String) args[4];
+		String fieldName = (String) args[0];
+		String fieldValue = (String) args[1];
 
-		return storeValue(tableName, id, fieldName, fieldValue, extra);
+		return storeValue(fieldName, fieldValue);
 	}
 
 	public String getName() {
@@ -36,7 +30,7 @@ public class StoreValueFunction extends ListActivity implements IFunctionHandler
 
 	@SuppressWarnings("unchecked")
 	public Vector getPrototypes() {
-		Class[] prototypes = { String.class, String.class, String.class, String.class, String.class };
+		Class[] prototypes = { String.class, String.class};
 		Vector v = new Vector();
 		v.add(prototypes);
 		return v;
@@ -52,8 +46,14 @@ public class StoreValueFunction extends ListActivity implements IFunctionHandler
 		return false;
 	}
     
-    private  boolean storeValue(String tableName, String id, String fieldName, String fieldValue, String extra){
-    	String item=tableName + ":" + id;
+    private  boolean storeValue(String fieldName, String fieldValue){
+    	if (fieldName.equalsIgnoreCase(HCTSharedConstants.GIVENNAME))
+    		HCTSharedConstants.givenname=fieldValue;
+    	if (fieldName.equalsIgnoreCase(HCTSharedConstants.MIDDLENAME))
+    		HCTSharedConstants.middlename=fieldValue;
+    	if (fieldName.equalsIgnoreCase(HCTSharedConstants.FAMILYNAME))
+    		HCTSharedConstants.familyname=fieldValue;
+    	/**String item=tableName + ":" + id;
     	Cursor mCursor;
     	mDbAdapter=new HCTDbAdapter(HCTSharedConstants.dbCtx);
 		mDbAdapter.open();
@@ -71,7 +71,7 @@ public class StoreValueFunction extends ListActivity implements IFunctionHandler
 				}
 			}
 			/* else
-				mDbAdapter.updateField(tableName, "id", id, fieldName, fieldValue);*/
+				mDbAdapter.updateField(tableName, "id", id, fieldName, fieldValue);
 		}
 		else {
 			mCursor.close();
@@ -86,18 +86,14 @@ public class StoreValueFunction extends ListActivity implements IFunctionHandler
 					}
 				}
 			}
-		}
+		}*/
  	
     	return true;
     }
     
     @SuppressWarnings("unused")
 	private boolean inTemp(String item){
-    	for (int i=0;i<HCTSharedConstants.tempDB.size();i++){
-    		if (HCTSharedConstants.tempDB.get(i).equalsIgnoreCase(item))
-    			return true;
-    	}
-		return false;
+    	return HCTSharedConstants.tempDB.contains(item);
     }
 
 }

@@ -36,7 +36,7 @@ public class ServerPreferences extends PreferenceActivity implements
          sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     	adminPassword=sp.getString(KEY_ADMIN_PASSWORD, null);
         
-        addPreferencesFromResource(R.xml.global_preferences);
+        addPreferencesFromResource(R.xml.server_preferences);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.preferences));
         updateServer();
         updateUsername();

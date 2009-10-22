@@ -18,6 +18,7 @@ public class HCTDbAdapter {
 
     public static final String KEY_ID = "id";
     public static final String KEY_HOUSEHOLD_HEAD = "headid";
+    public static final String KEY_PERSON_NAME="fullname";
     public static final String KEY_HOUSEHOLD_LOCATION = "location";
     public static final String KEY_HOUSEHOLD_ID = "householdid";
     public static final String KEY_ROWID = "_id";
@@ -37,7 +38,7 @@ public class HCTDbAdapter {
     			+ KEY_ID + " text not null, " + KEY_HOUSEHOLD_HEAD + " text, " + KEY_HOUSEHOLD_LOCATION + " text);";
     private static final String TABLE_CREATE_HCT =
         "create table " + HCTSharedConstants.INDIVIDUAL + " (" + KEY_ROWID + " integer primary key autoincrement, "
-        + KEY_ID + " text not null, " + KEY_HOUSEHOLD_ID + " text not null);";
+        + KEY_ID + " text not null, " + KEY_PERSON_NAME + " text, " + KEY_HOUSEHOLD_ID + " text not null);";
     
     private final Context mCtx;	
 
@@ -104,10 +105,11 @@ public class HCTDbAdapter {
      * @param id
      * @param parent_id
      */
-    public void insertID(String tableName, String id, String parent_id) {
+    public void insertIndividual(String tableName, String id, String parent_id, String name) {
         ContentValues initialValues = new ContentValues();
     	initialValues.put(KEY_ID, id);
     	initialValues.put(KEY_HOUSEHOLD_ID, parent_id);
+    	initialValues.put(KEY_PERSON_NAME, name);
     	mDb.insert(tableName, null, initialValues);
     }
     
@@ -118,7 +120,7 @@ public class HCTDbAdapter {
 	 * @param householdHeadId
 	 * @param location
 	 */
-	public void insertID(String tableName, String id, String headId, String location) {
+	public void insertHousehold(String tableName, String id, String headId, String location) {
 		ContentValues initialValues = new ContentValues();
     	initialValues.put(KEY_ID, id);
     	initialValues.put(KEY_HOUSEHOLD_HEAD, headId);
@@ -173,9 +175,9 @@ public class HCTDbAdapter {
      *  @param household_id
      *  @return Cursor 
      */
-    public Cursor getHCTIDs(String household_id) {
+    public Cursor getHouseholdPersons(String household_id) {
     	Cursor mCursor = null;
-    	mCursor= mDb.query(true, HCTSharedConstants.INDIVIDUAL, new String[] {KEY_ROWID, KEY_ID}, KEY_HOUSEHOLD_ID + " like '" + household_id + "'", null, null, null, null, null);
+    	mCursor= mDb.query(true, HCTSharedConstants.INDIVIDUAL, new String[] {KEY_ROWID, KEY_ID, KEY_PERSON_NAME}, KEY_HOUSEHOLD_ID + " like '" + household_id + "'", null, null, null, null, null);
     	if (mCursor.getCount()<1){
         	mCursor.close();
         	return null;

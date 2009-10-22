@@ -23,7 +23,11 @@ public class AdminAuthenticateActivity extends Activity {
 		setContentView(R.layout.admin_authenticate);
 
 		adminPassword = PreferenceManager.getDefaultSharedPreferences(this).getString("admin_password", null);
-		authenticate();
+		if (adminPassword==null) {
+			Toast.makeText(AdminAuthenticateActivity.this,"Administrative error. See your administrator!", Toast.LENGTH_SHORT).show();
+			finish();
+		}else
+			authenticate();
 	}
 
 	/**

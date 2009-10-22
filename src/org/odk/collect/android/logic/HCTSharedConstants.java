@@ -16,6 +16,7 @@
 
 package org.odk.collect.android.logic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.odk.collect.android.database.HCTDbAdapter;
@@ -42,21 +43,24 @@ public class HCTSharedConstants {
 	private static HCTDbAdapter mDbAdapter;
 
 	public static final String HOUSEHOLD = "household";
+	public static final String GIVENNAME = "givenname";
+	public static final String MIDDLENAME = "middlename";
+	public static final String FAMILYNAME = "familyname";
 	public static final String INDIVIDUAL = "individual";
 	public static final String HOUSEHEAD = "HeadID";
+	public static final String SPECIAL_FILES_PATH = "/sdcard/odk/specialfiles/";
+	public static final String UPLOADER_FILE = "ProcessFileUpload.jsp";
 
 	public static String currentIndividual = null;
+	public static String givenname=null;
+	public static String middlename=null;
+	public static String familyname=null;
 	public static String householdId= null;
 	public static String householdHeadId = null;
 
 	public static Context dbCtx;
 	public static Context alertCtx;
 
-	// Special files storage path
-	public static final String SPECIAL_FILES_PATH = "/sdcard/odk/specialfiles/";
-	
-	// Uploader File 
-	public static final String UPLOADER_FILE = "ProcessFileUpload.jsp";
 
 	//TODO variables for unique function 
 	//Need a better way of doing this 
@@ -71,44 +75,72 @@ public class HCTSharedConstants {
 	 */
 	public static void saveIDs() {
 		String strTemp = "";
+		saveNames();
 		mDbAdapter = new HCTDbAdapter(dbCtx);
 		mDbAdapter.open();
-		// remove any duplicates, just in case
+		// remove any duplicates, just in case 
 		for (int i = 0; i < tempIDs.size(); i++) {
 			if (strTemp == tempIDs.get(i))
 				tempIDs.remove(i);
 			else
 				strTemp = tempIDs.get(i);
 		}
+		
+		//and set household-id
+		for (int i = 0; i < tempIDs.size(); i++) {
+			String table = tempIDs.get(i).substring(0,tempIDs.get(i).indexOf(":"));
+			String id = tempIDs.get(i).substring(tempIDs.get(i).indexOf(":") + 2);
+			if (table.equals(HOUSEHOLD))
+				strTemp = id;
+		}
 
 		// And then write the id's into the database.
 		for (int i = 0; i < tempIDs.size(); i++) {
-			String table = tempIDs.get(i).substring(0,
-					tempIDs.get(i).indexOf(":"));
-			String id = tempIDs.get(i).substring(
-					tempIDs.get(i).indexOf(":") + 2);
+			String table = tempIDs.get(i).substring(0,tempIDs.get(i).indexOf(":"));
+			String id = tempIDs.get(i).substring(tempIDs.get(i).indexOf(":") + 2);
 
 			if (table.equals(HOUSEHOLD)) {
-				strTemp = id;
-				mDbAdapter.insertID(table, id, householdHeadId, null); 
+				if (mDbAdapter.confirmNewID(table,id))
+					mDbAdapter.insertHousehold(table, id, householdHeadId, null); 
 			}
 
-			if (table.equals(INDIVIDUAL))
-				mDbAdapter.insertID(table, id, strTemp);
+			if (table.equals(INDIVIDUAL)) {
+				String name=null;
+				//get individual names
+				for (int j = 0; j < tempDB.size(); j++) {
+					if (tempDB.get(j).startsWith(id))
+						name=tempDB.get(j).substring(tempDB.get(j).indexOf(" "));		
+				}
+				mDbAdapter.insertIndividual(table, id, strTemp,name);
+			}
 		}
 		mDbAdapter.close();
+	}
+	
+	public static void saveNames() {
+		String nameTemplate="";
+		if (currentIndividual != null && currentIndividual != "") {
+			nameTemplate=currentIndividual.substring(currentIndividual.indexOf(" ")+1);
+			if (givenname != null && givenname != "")
+				nameTemplate=nameTemplate + " " + givenname;
+			if (middlename != null && middlename != "")
+				nameTemplate=nameTemplate + " " + middlename;
+			if (familyname != null && familyname != "")
+				nameTemplate=nameTemplate + " " + familyname;
+			if (tempDB==null)tempDB=new ArrayList<String>();
+			tempDB.add(nameTemplate);
+			familyname=givenname=middlename=null;
+		}
 	}
 	
 	public static void cleanUp(){
 		if (tempIDs != null) tempIDs.clear();
 		if (tempDB != null) tempDB.clear();
 		if (reviews != null) reviews.clear();
-		currentIndividual=null;
-		householdHeadId=null;
-		householdId=null;
-		savedForm=false;
-		savedFormName=null;
-		finalizing=false;
+		currentIndividual=householdHeadId=givenname=
+		middlename=familyname=householdId=	savedFormName=null;
+		
+		savedForm=finalizing=false;
 	}
 	
 	/**
@@ -120,7 +152,7 @@ public class HCTSharedConstants {
 		String hctIDs;
 		HCTDbAdapter mDbAdapter = new HCTDbAdapter(dbCtx);
 		mDbAdapter.open();
-		Cursor mIDCursor = mDbAdapter.getHCTIDs(household_id.trim());
+		Cursor mIDCursor = mDbAdapter.getHouseholdPersons(household_id.trim());
 		mDbAdapter.close();
 		ListActivity lstActivity = new ListActivity();
 		lstActivity.startManagingCursor(mIDCursor);
@@ -130,7 +162,7 @@ public class HCTSharedConstants {
 			liteCursor.fillWindow(0, cw);
 			hctIDs="";
 			for (int i = 0; i < cw.getNumRows(); i++) {
-				hctIDs = hctIDs + cw.getString(i, 1) + "\n";
+				hctIDs = hctIDs + cw.getString(i, 1) + ":  " + cw.getString(i, 2) + "\n";
 			}
 		}else 
 			hctIDs="No persons in household";

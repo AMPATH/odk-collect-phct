@@ -105,8 +105,14 @@ public class UniqueFunction implements IFunctionHandler {
     private  boolean confirmNewID(String idType, String id){
     	
     	//Finalizing a form: No need checking
-    	if (HCTSharedConstants.finalizing)
-    		return true;
+    	if (HCTSharedConstants.finalizing) {
+    		if (HCTSharedConstants.savedForm && idType.equalsIgnoreCase(HCTSharedConstants.HOUSEHOLD)
+    				&& (HCTSharedConstants.householdId==null || HCTSharedConstants.householdId.trim()==""))
+    			return confirmNewHousehold(idType, id);
+    		else
+    			return true;
+    	}
+    		
     	
     	//Initialize database connection
     	mDbAdapter=new HCTDbAdapter(HCTSharedConstants.dbCtx);

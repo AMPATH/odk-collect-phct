@@ -28,8 +28,8 @@
 	<string name="enter_data_description">%s has been selected for entry.</string>
 	<string name="review_data_description">%s has been selected for review.</string>
 
-	<string name="review_data">Review Stored Data</string>
-	<string name="review_data_button">Review Stored Data (%s)</string>
+	<string name="review_data">Review Saved Data</string>
+	<string name="review_data_button">Review Saved Data (%s)</string>
 
 	<string name="send_selected_data">Send Selected File(s)</string>
 	<string name="send_all_data">Send All Data</string>
@@ -43,10 +43,10 @@
 	<string name="loading_form">Loading Form...</string>
 	<string name="please_wait">Please wait a few moments.</string>
 
-	<string name="save_for_later">Save for Later</string>
-	<string name="finalize_for_send">Finalize for Sending</string>
+	<string name="save_for_later">Save as Incomplete</string>
+	<string name="finalize_for_send">Save as Complete</string>
 
-	<string name="save_data_message">Please choose one to keep results.</string>
+	<string name="save_data_message">Please choose one to save results.</string>
 	<string name="save_data_description">%s has ended.</string>
 
 	<string name="enter_url">Enter URL</string>
@@ -188,6 +188,7 @@
 	<string name="username">Username</string>
 	<string name="admin_password">Admin Password</string>
 	<string name="default_admin_password">hctPassword</string>
+	
 
 	<string name="edit_saved_completed_data">Edit Saved or Finalized Data</string>
 

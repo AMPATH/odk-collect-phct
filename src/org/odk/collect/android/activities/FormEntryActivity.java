@@ -757,6 +757,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				case DialogInterface.BUTTON1: // yes, repeat
 					mFormHandler.newRepeat();
 					HCTSharedConstants.currentIndividual=null;
+					HCTSharedConstants.saveNames();
 					showNextView();
 					break;
 				case DialogInterface.BUTTON2: // no, no repeat
@@ -873,9 +874,16 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	 */
 	private void createSaveExitDialog(boolean markCompleted) {
 
-		if (saveCurrentAnswer(true) && saveDataToDisk(markCompleted)) {
-			finish();
-		}
+        int promptType = mFormHandler.currentPrompt().getType();
+        boolean saveStatus = true;
+
+        if (promptType != PromptElement.TYPE_START && promptType != PromptElement.TYPE_END) {
+            saveStatus = saveCurrentAnswer(true);
+        }
+
+        if (saveStatus && saveDataToDisk(markCompleted)) {
+            finish();
+        }
 	}
 
 	/**

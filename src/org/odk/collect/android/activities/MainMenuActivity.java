@@ -273,7 +273,7 @@ public class MainMenuActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.preferences)).setIcon(
+        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.server_preferences)).setIcon(
                 android.R.drawable.ic_menu_preferences);
         return true;
     }
