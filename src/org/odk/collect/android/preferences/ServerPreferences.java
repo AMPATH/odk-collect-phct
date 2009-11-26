@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -27,6 +28,7 @@ public class ServerPreferences extends PreferenceActivity implements
     public static String KEY_PASSWORD = "password";
     public static String KEY_ADMIN_PASSWORD = "admin_password";
     private static String adminPassword;
+    private static String serverUrl;
     private static boolean pressedCancel=false;
     private SharedPreferences sp;
 
@@ -35,7 +37,8 @@ public class ServerPreferences extends PreferenceActivity implements
         super.onCreate(savedInstanceState);
          sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     	adminPassword=sp.getString(KEY_ADMIN_PASSWORD, null);
-        
+    	serverUrl=sp.getString(KEY_SERVER, null);
+    	
         addPreferencesFromResource(R.xml.server_preferences);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.preferences));
         updateServer();
@@ -53,8 +56,8 @@ public class ServerPreferences extends PreferenceActivity implements
         });
         
         RelativeLayout layout = new RelativeLayout(this);
-        layout.setLayoutParams( new  ViewGroup.LayoutParams( RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT ) );
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        layout.setLayoutParams( new  ViewGroup.LayoutParams( LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT ) );
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         
@@ -103,11 +106,10 @@ public class ServerPreferences extends PreferenceActivity implements
 	    if (s.startsWith("http://") || s.startsWith("https://")) {
 	        etp.setSummary(s);
 	    } else {
-	        Toast.makeText(getApplicationContext(),
-	                getString(R.string.url_error),
-	                Toast.LENGTH_SHORT).show();
+	    	etp.setText(serverUrl);
+	    	etp.setSummary(serverUrl);
+	        Toast.makeText(getApplicationContext(), getString(R.string.url_error), Toast.LENGTH_SHORT).show();
 	    }
-        etp.setSummary(s);
     }
 
 
