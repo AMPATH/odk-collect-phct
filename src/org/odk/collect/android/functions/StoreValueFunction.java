@@ -53,6 +53,8 @@ public class StoreValueFunction extends ListActivity implements IFunctionHandler
     		HCTSharedConstants.middlename=fieldValue;
     	if (fieldName.equalsIgnoreCase(HCTSharedConstants.FAMILYNAME))
     		HCTSharedConstants.familyname=fieldValue;
+    	
+    	//TODO Check there is only one self in a household
     	/**String item=tableName + ":" + id;
     	Cursor mCursor;
     	mDbAdapter=new HCTDbAdapter(HCTSharedConstants.dbCtx);

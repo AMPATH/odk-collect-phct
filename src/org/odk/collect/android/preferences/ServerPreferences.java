@@ -54,13 +54,13 @@ public class ServerPreferences extends PreferenceActivity implements
         
         RelativeLayout layout = new RelativeLayout(this);
         layout.setLayoutParams( new  ViewGroup.LayoutParams( RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT ) );
-        RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params1.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        params1.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
         
-        layout.addView(doneButton, params1);
+        layout.addView(doneButton, params);
         
-        addContentView(layout, params1);
+        addContentView(layout, params);
     }
 
 
@@ -97,12 +97,16 @@ public class ServerPreferences extends PreferenceActivity implements
 
 
     private void updateServer() {
-        EditTextPreference etp =
-                (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_SERVER);
-        String s = etp.getText();
-        if (s.endsWith("/")) {
-            s = s.substring(0, s.lastIndexOf("/"));
-        }
+    	EditTextPreference etp =
+            (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_SERVER);
+	    String s = etp.getText();
+	    if (s.startsWith("http://") || s.startsWith("https://")) {
+	        etp.setSummary(s);
+	    } else {
+	        Toast.makeText(getApplicationContext(),
+	                getString(R.string.url_error),
+	                Toast.LENGTH_SHORT).show();
+	    }
         etp.setSummary(s);
     }
 

@@ -51,7 +51,7 @@
 
 	<string name="enter_url">Enter URL</string>
 
-	<string name="preferences">Global Preferences</string>
+	<string name="preferences">Server Preferences</string>
 	<string name="server_preferences">Server Preferences</string>
 
 	<string name="add_repeat">Add a \"%s\"?</string>
