@@ -1,6 +1,7 @@
 package org.odk.collect.android.preferences;
 
 import org.odk.collect.android.R;
+import org.odk.collect.android.utilities.UrlUtils;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -28,7 +29,6 @@ public class ServerPreferences extends PreferenceActivity implements
     public static String KEY_PASSWORD = "password";
     public static String KEY_ADMIN_PASSWORD = "admin_password";
     private static String adminPassword;
-    private static String serverUrl;
     private static boolean pressedCancel=false;
     private SharedPreferences sp;
 
@@ -37,7 +37,6 @@ public class ServerPreferences extends PreferenceActivity implements
         super.onCreate(savedInstanceState);
          sp = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
     	adminPassword=sp.getString(KEY_ADMIN_PASSWORD, null);
-    	serverUrl=sp.getString(KEY_SERVER, null);
     	
         addPreferencesFromResource(R.xml.server_preferences);
         setTitle(getString(R.string.app_name) + " > " + getString(R.string.preferences));
@@ -103,13 +102,13 @@ public class ServerPreferences extends PreferenceActivity implements
     	EditTextPreference etp =
             (EditTextPreference) this.getPreferenceScreen().findPreference(KEY_SERVER);
 	    String s = etp.getText();
-	    if (s.startsWith("http://") || s.startsWith("https://")) {
-	        etp.setSummary(s);
-	    } else {
-	    	etp.setText(serverUrl);
-	    	etp.setSummary(serverUrl);
-	        Toast.makeText(getApplicationContext(), getString(R.string.url_error), Toast.LENGTH_SHORT).show();
-	    }
+	    if (UrlUtils.isValidUrl(s)) {
+            etp.setText(s);
+            etp.setSummary(s);
+        } else {
+            etp.setText((String) etp.getSummary());
+            Toast.makeText(getApplicationContext(), getString(R.string.url_error), Toast.LENGTH_SHORT).show();
+        }
     }
 
 
