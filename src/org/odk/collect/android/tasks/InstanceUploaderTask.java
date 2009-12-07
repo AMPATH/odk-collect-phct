@@ -81,7 +81,7 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
             DefaultHttpClient httpclient = new DefaultHttpClient(params);
             HttpPost httppost = new HttpPost(mUrl);
             byte[] bytes = mAuthCredentials.getBytes();
-    		httppost.setHeader("Authorization", "Basic " + new String(Base64.encodeBase64(bytes)));
+    		httppost.setHeader("Authorization", new String(Base64.encodeBase64(bytes)));
 
             // get instance file
             File file = new File(values[i]);
@@ -126,9 +126,7 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
                 return uploadedIntances;
             }
             
-            System.out.println(response.getStatusLine().toString());
             // check response.
-            // TODO: This isn't handled correctly.
             String serverLocation = null;
             Header[] h = response.getHeaders("Location");
             if (h != null && h.length > 0) {
