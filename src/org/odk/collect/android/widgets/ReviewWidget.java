@@ -61,7 +61,7 @@ public class ReviewWidget extends LinearLayout implements IQuestionWidget {
 	        			cal.setTime(new Date());
 	        			
 	        			//convert age to days
-	        			ageInMonths*=-30;
+	        			ageInMonths*=-30.4375;
 	        			
 	        			// add (actually subtract) number of days
 	         			cal.add(Calendar.DATE ,ageInMonths);
