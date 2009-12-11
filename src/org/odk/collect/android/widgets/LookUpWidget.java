@@ -196,7 +196,6 @@ public class LookUpWidget extends LinearLayout implements IQuestionWidget {
     }
 
 
-	@Override
 	public void setFocus(Context context) {
         // Put focus on text input field and display soft keyboard if appropriate.
         this.requestFocus();

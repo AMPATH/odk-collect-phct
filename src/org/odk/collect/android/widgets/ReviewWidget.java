@@ -89,9 +89,7 @@ public class ReviewWidget extends LinearLayout implements IQuestionWidget {
     }
 
 
-	@Override
 	public void setFocus(Context context) {
-		// TODO Auto-generated method stub
 		
 	}
 

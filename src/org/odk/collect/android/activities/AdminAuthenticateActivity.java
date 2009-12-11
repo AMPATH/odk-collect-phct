@@ -18,6 +18,7 @@ public class AdminAuthenticateActivity extends Activity {
 	private static String adminPassword;
 	private Intent i;
 
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.admin_authenticate);

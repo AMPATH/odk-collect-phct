@@ -137,7 +137,6 @@ public class ServerPreferences extends PreferenceActivity implements
     	     .setView(fl)
     	     .setTitle("Current Admin Passowrd")
     	     .setPositiveButton("OK", new DialogInterface.OnClickListener(){
-    	          @Override
     	          public void onClick(DialogInterface d, int which) {
     	               d.dismiss();
     	               if (adminPassword.equals(input.getText().toString()))
@@ -151,7 +150,6 @@ public class ServerPreferences extends PreferenceActivity implements
     	          }
     	     })
     	     .setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-    	          @Override
     	          public void onClick(DialogInterface d, int which) {
     	        	  pressedCancel=true;
     	        	  d.dismiss();
