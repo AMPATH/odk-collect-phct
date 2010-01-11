@@ -25,7 +25,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.odk.collect.android.R;
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.ServerPreferences;
+import org.odk.collect.android.preferences.GlobalPreferences;
 import org.odk.collect.android.tasks.FormDownloadTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.w3c.dom.Document;
@@ -112,7 +112,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
                 PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String url =
                 settings
-                        .getString(ServerPreferences.KEY_SERVER, getString(R.string.default_server))
+                        .getString(GlobalPreferences.KEY_SERVER, getString(R.string.default_server))
                         + "/formList";
         mFormDownloadTask.setDownloadServer(url);
         mFormDownloadTask.execute();
@@ -167,7 +167,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, MENU_ADD, 0, getString(R.string.add_file)).setIcon(
                 android.R.drawable.ic_menu_add);
-        menu.add(0, MENU_PREFS, 0, getString(R.string.server_preferences)).setIcon(
+        menu.add(0, MENU_PREFS, 0, getString(R.string.global_preferences)).setIcon(
                 android.R.drawable.ic_menu_preferences);
         return true;
     }
@@ -187,7 +187,7 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
     }
     
     private void createPreferencesMenu() {
-        Intent i = new Intent(this, ServerPreferences.class);
+        Intent i = new Intent(this, GlobalPreferences.class);
         startActivity(i);
     }
 

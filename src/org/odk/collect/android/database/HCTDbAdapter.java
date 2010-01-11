@@ -203,7 +203,6 @@ public class HCTDbAdapter {
     	return newId;
     }
 
-
     /**
      * @param tableName table to perform update on
      * @param rowName item to update
@@ -218,6 +217,5 @@ public class HCTDbAdapter {
     	args.put(fieldName, fieldValue);
  
     	mDb.insert(tableName, null, args);
-		//return mDb.update(tableName, args, rowName + "=" + rowValue, null) > 0;
     }
 }

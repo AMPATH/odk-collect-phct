@@ -16,6 +16,15 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.preferences.GlobalPreferences;
+import org.odk.collect.android.preferences.UserPreferences;
+import org.odk.collect.android.utilities.FileUtils;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -26,14 +35,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.ServerPreferences;
-import org.odk.collect.android.utilities.FileUtils;
-
-import java.util.ArrayList;
 
 /**
  * Responsible for displaying buttons to launch the major activities. Launches
@@ -48,10 +49,10 @@ public class MainMenuActivity extends Activity {
     private static final int FORM_CHOOSER = 0;
     private static final int INSTANCE_CHOOSER_TABS = 1;
     private static final int INSTANCE_UPLOADER = 2;
-    private static final int MANAGE_FORMS = 3;
 
     // menu options
-    public static final int MENU_PREFERENCES = Menu.FIRST;
+    private static final int MENU_USER_PREFERENCES = Menu.FIRST + 1;
+    private static final int MENU_GLOBAL_PREFERENCES = Menu.FIRST + 2;
 
     // buttons
     private Button mEnterDataButton;
@@ -132,7 +133,7 @@ public class MainMenuActivity extends Activity {
         mSendDataButton = (Button) findViewById(R.id.send_data);
         mSendDataButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                if (mCompletedCount == 0) {
+                if (mCompletedCount + mSavedCount == 0) {
                     Toast.makeText(getApplicationContext(),
                             getString(R.string.no_items_error, getString(R.string.send)),
                             Toast.LENGTH_SHORT).show();
@@ -149,8 +150,14 @@ public class MainMenuActivity extends Activity {
         mManageFilesButton = (Button) findViewById(R.id.manage_forms);
         mManageFilesButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), AdminAuthenticateActivity.class);
-                startActivityForResult(i, MANAGE_FORMS);
+            	Intent i = new Intent(getApplicationContext(), FileManagerTabs.class);
+            	if (GlobalConstants.isPassworded) {
+        	    	if (GlobalConstants.isAdminAuthenticated) 
+        		        startActivity(i);
+        	    	else
+        	    		Toast.makeText(getApplicationContext(), R.string.access_denied, Toast.LENGTH_SHORT).show();
+            	}else
+            		startActivity(i);
             }
         });
 
@@ -190,10 +197,6 @@ public class MainMenuActivity extends Activity {
                 i.putExtra(GlobalConstants.KEY_INSTANCEPATH, instancePath);
                 startActivity(i);
                 break;
-            case MANAGE_FORMS:
-            	i = new Intent(getApplicationContext(), FileManagerTabs.class);
-                startActivity(i);
-            	
             default:
                 break;
         }
@@ -258,22 +261,33 @@ public class MainMenuActivity extends Activity {
         }
 
         mManageFilesButton.setText(getString(R.string.manage_files));
-        mSendDataButton.setText(getString(R.string.send_data_button, mCompletedCount));
+        mSendDataButton.setText(getString(R.string.send_all_data, mCompletedCount + mSavedCount));
         mReviewDataButton.setText(getString(R.string.review_data_button, mSavedCount
                 + mCompletedCount));
     }
 
-
-    private void createPreferencesMenu() {
-        Intent i = new Intent(this, ServerPreferences.class);
+    private void createUserPreferencesMenu() {
+        Intent i = new Intent(this, UserPreferences.class);
         startActivity(i);
+    }
+    private void createGlobalPreferencesMenu() {
+    	Intent i = new Intent(this, GlobalPreferences.class);
+    	if (GlobalConstants.isPassworded) {
+	    	if (GlobalConstants.isAdminAuthenticated) 
+		        startActivity(i);
+	    	else
+	    		Toast.makeText(this, R.string.access_denied, Toast.LENGTH_SHORT).show();
+    	}else
+    		startActivity(i);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        menu.add(0, MENU_PREFERENCES, 0, getString(R.string.server_preferences)).setIcon(
+        menu.add(0, MENU_USER_PREFERENCES, 0, getString(R.string.user_preferences)).setIcon(
+                android.R.drawable.ic_menu_preferences);
+        menu.add(0, MENU_GLOBAL_PREFERENCES, 0, getString(R.string.global_preferences)).setIcon(
                 android.R.drawable.ic_menu_preferences);
         return true;
     }
@@ -282,8 +296,11 @@ public class MainMenuActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case MENU_PREFERENCES:
-                createPreferencesMenu();
+            case MENU_USER_PREFERENCES:
+                createUserPreferencesMenu();
+                return true;
+            case MENU_GLOBAL_PREFERENCES:
+                createGlobalPreferencesMenu();
                 return true;
         }
         return super.onOptionsItemSelected(item);

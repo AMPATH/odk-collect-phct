@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.preferences.ServerPreferences;
+import org.odk.collect.android.preferences.UserPreferences;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -49,7 +49,6 @@ public class InstanceUploaderList extends ListActivity {
 
     private SimpleCursorAdapter mInstances;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +65,7 @@ public class InstanceUploaderList extends ListActivity {
         // get all mInstances that match the status.
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
-        Cursor c = fda.fetchFilesByType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_COMPLETED);
+        Cursor c = fda.fetchFilesByNotType(FileDbAdapter.TYPE_INSTANCE, FileDbAdapter.STATUS_SUBMITTED);
         startManagingCursor(c);
 
         String[] data = new String[] {FileDbAdapter.KEY_DISPLAY, FileDbAdapter.KEY_META};
@@ -95,7 +94,6 @@ public class InstanceUploaderList extends ListActivity {
         // paths to upload
         ArrayList<String> allInstances = new ArrayList<String>();
 
-        // get all checked items
         Cursor c = null;
 
         for (int i = 0; i < mInstances.getCount(); i++) {
@@ -120,7 +118,7 @@ public class InstanceUploaderList extends ListActivity {
         super.onCreateOptionsMenu(menu);
         menu.add(0, MENU_UPLOAD_ALL, 0, R.string.send_data).setIcon(
                 R.drawable.ic_menu_send);
-        menu.add(0, MENU_PREFS, 0, getString(R.string.server_preferences)).setIcon(
+        menu.add(0, MENU_PREFS, 0, getString(R.string.user_preferences)).setIcon(
                 android.R.drawable.ic_menu_preferences);
         return true;
     }
@@ -140,7 +138,7 @@ public class InstanceUploaderList extends ListActivity {
     }
 
     private void createPreferencesMenu() {
-        Intent i = new Intent(this, ServerPreferences.class);
+        Intent i = new Intent(this, UserPreferences.class);
         startActivity(i);
     }
     

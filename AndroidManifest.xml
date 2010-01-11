@@ -15,7 +15,7 @@ the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.odk.collect.android" android:versionCode="2" android:versionName="1.1.0">
   <application android:label="@string/app_name" android:theme="@android:style/Theme.Light" android:icon="@drawable/main_icon">
-  <activity android:label="@string/app_name" android:name=".activities.MainMenuActivity">
+  <activity android:label="@string/app_name" android:name=".activities.AuthenticateActivity">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.DEFAULT"/>
@@ -31,9 +31,10 @@ the License.
     <activity android:name=".activities.FileManagerTabs" android:label="@string/app_name"/>
     <activity android:name=".activities.InstanceUploaderList" android:label="@string/app_name"/>
     <activity android:name=".activities.InstanceUploaderActivity" android:label="@string/app_name"/>
-    <activity android:name=".preferences.ServerPreferences" android:label="@string/app_name"/>
-  <activity android:name=".activities.FormHierarchyActivity" android:label="@string/app_name"/>
-  <activity android:name=".activities.AdminAuthenticateActivity"></activity>
+ 	<activity android:name=".activities.FormHierarchyActivity" android:label="@string/app_name"/>
+	<activity android:name=".activities.MainMenuActivity" android:label="@string/app_name" />
+<activity android:name=".preferences.GlobalPreferences"></activity>
+<activity android:name=".preferences.UserPreferences"></activity>
 </application>
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.READ_PHONE_STATE"/>
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.INTERNET"/>

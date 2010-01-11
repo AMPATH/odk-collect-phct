@@ -12,26 +12,25 @@
 		android:key="username" 
 		android:defaultValue="" 
 		android:title="@string/username"
-		android:dialogTitle="@string/change_user" 
+		android:dialogTitle="@string/change_username" 
 		android:enabled="true" />
 
-	<EditTextPreference 
-		android:id="@+id/password"
-		android:key="password" 
-		android:defaultValue="" 
-		android:title="@string/password"
-		android:password="true" 
-		android:dialogTitle="@string/change_password"
-		android:summary="@string/change_password_summary"
-		android:enabled="true" />
-		
+
+
 	<EditTextPreference 
 		android:id="@+id/admin_password"
 		android:key="admin_password" 
-		android:defaultValue="@string/default_admin_password" 
-		android:title="@string/admin_password"
+		android:defaultValue="@string/default_admin_password"
+		android:title="@string/admin_password" 
 		android:password="true"
 		android:dialogTitle="@string/change_admin_password" 
 		android:enabled="true" />
 
+
+	<CheckBoxPreference 
+		android:key="application_password"
+		android:summaryOff="@string/application_password_off"
+		android:summaryOn="@string/application_password_on" 
+		android:title="@string/password" />
+		
 </PreferenceScreen>

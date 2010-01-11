@@ -49,7 +49,6 @@ public class HCTSharedConstants {
 	public static final String INDIVIDUAL = "individual";
 	public static final String HOUSEHEAD = "HeadID";
 	public static final String SPECIAL_FILES_PATH = "/sdcard/odk/specialfiles/";
-	public static final String UPLOADER_FILE = "ProcessFileUpload.jsp";
 
 	public static String currentIndividual = null;
 	public static String givenname=null;

@@ -17,20 +17,11 @@ package org.odk.collect.android.activities;
 
 import java.util.ArrayList;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.params.HttpClientParams;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.InstanceUploaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.HCTSharedConstants;
-import org.odk.collect.android.preferences.ServerPreferences;
+import org.odk.collect.android.preferences.UserPreferences;
 import org.odk.collect.android.tasks.InstanceUploaderTask;
 
 import android.app.Activity;
@@ -39,6 +30,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
@@ -71,28 +63,24 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         }
         
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        String url = settings.getString(ServerPreferences.KEY_SERVER, getString(R.string.default_server));
-        String authCredentials = settings.getString(ServerPreferences.KEY_USERNAME, getString(R.string.username)) + 
-    			":" + settings.getString(ServerPreferences.KEY_PASSWORD, getString(R.string.password));
+        String url = settings.getString(UserPreferences.KEY_SERVER, getString(R.string.default_server));
+        String authCredentials = settings.getString(UserPreferences.KEY_USERNAME, getString(R.string.username)) + 
+    			":" + settings.getString(UserPreferences.KEY_PASSWORD, getString(R.string.password));
         
-        if (authenticate(url,authCredentials)){
-	        mInstanceUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
-	        if (mInstanceUploaderTask == null) {
-	
-	            // setup dialog and upload task
-	            showDialog(PROGRESS_DIALOG);
-	            mInstanceUploaderTask = new InstanceUploaderTask();
-	            mInstanceUploaderTask.setUploadServer(url + "/" + HCTSharedConstants.UPLOADER_FILE);
-	            mInstanceUploaderTask.setAuthCredentials(authCredentials);
-	            totalCount = instances.size();
-	            
-	            // convert array list to an array
-	            String[] sa = instances.toArray(new String[totalCount]);
-	            mInstanceUploaderTask.execute(sa);
-	
-		    }
-        }
+        mInstanceUploaderTask = (InstanceUploaderTask) getLastNonConfigurationInstance();
+        if (mInstanceUploaderTask == null) {
 
+            // setup dialog and upload task
+            showDialog(PROGRESS_DIALOG);
+            mInstanceUploaderTask = new InstanceUploaderTask();
+            mInstanceUploaderTask.setUploadServer(url);
+            mInstanceUploaderTask.setAuthCredentials(authCredentials);
+            totalCount = instances.size();
+            
+            // convert array list to an array
+            String[] sa = instances.toArray(new String[totalCount]);
+            mInstanceUploaderTask.execute(sa);
+	    }
     }
 
 
@@ -120,7 +108,11 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         FileDbAdapter fda = new FileDbAdapter(this);
         fda.open();
         for (int i = 0; i < resultSize; i++) {
-            fda.updateFile(result.get(i), FileDbAdapter.STATUS_SUBMITTED, null);
+        	Cursor c = fda.fetchFilesByPath(result.get(i), null);
+        	if ( c != null) {
+        		if (c.getString(c.getColumnIndex(FileDbAdapter.KEY_STATUS)).equals(FileDbAdapter.STATUS_COMPLETED))
+        			fda.updateFile(result.get(i), FileDbAdapter.STATUS_SUBMITTED, null);
+        	}
         }
         fda.close();
         finish();
@@ -193,39 +185,4 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
         }
         super.onResume();
     }
-    
-      /**
-	 * Authenticate user before attempting to submit files
-	 */
-	private boolean authenticate(String serverUrl, String authCredentials) {
-		// configure connection
-        HttpParams params = new BasicHttpParams();
-        HttpConnectionParams.setConnectionTimeout(params, GlobalConstants.CONNECTION_TIMEOUT);
-        HttpConnectionParams.setSoTimeout(params, GlobalConstants.CONNECTION_TIMEOUT);
-        HttpClientParams.setRedirecting(params, false);
-        HttpGet httpGet = new HttpGet(serverUrl);
-
-        // setup client
-        DefaultHttpClient httpclient = new DefaultHttpClient(params);
-		
-        if (authCredentials == null)
-			authCredentials="";
-
-		byte[] bytes = authCredentials.getBytes();
-		try {
-			httpGet.setHeader("Authorization", "Basic " + new String(Base64.encodeBase64(bytes)));
-			HttpResponse response = httpclient.execute(httpGet);
-			if (response.getStatusLine().getStatusCode()== 401){
-				// Authentication Required but supplied wrong credentials
-				Toast.makeText(this, R.string.upload_error, Toast.LENGTH_LONG).show();
-				return false;
-			}
-
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-		return true;
-	}
-
-
-}
+ }

@@ -324,6 +324,46 @@ public class FileDbAdapter {
         return c;
 
     }
+    
+    /**
+     * Get a cursor to multiple files from the database.
+     * 
+     * @param status status of the file
+     * @param type type of the file
+     * @return cursor to the files
+     * @throws SQLException
+     */
+    public Cursor fetchFilesByNotType(String type, String status) throws SQLException {
+        // cleanFiles();
+
+        Cursor c = null;
+        if (type == null) {
+            // no type given, search using status
+            c =
+                    mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
+                            KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, KEY_STATUS + "<>'"
+                            + status + "'", null, null, null, null, null);
+        } else if (status == null) {
+            // no status given, search using type
+            c =
+                    mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
+                            KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, KEY_TYPE + "='" + type
+                            + "'", null, null, null, null, null);
+        } else {
+            // search using type and status
+            c =
+                    mDb.query(true, DATABASE_TABLE, new String[] {KEY_ID, KEY_FILEPATH, KEY_HASH,
+                            KEY_TYPE, KEY_STATUS, KEY_DISPLAY, KEY_META}, KEY_TYPE + "='" + type
+                            + "' and " + KEY_STATUS + "<>'" + status + "'", null, null, null, null,
+                            null);
+        }
+
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+
+    }
 
 
     public Cursor fetchAllFiles() throws SQLException {

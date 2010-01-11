@@ -140,5 +140,11 @@ public class GlobalConstants {
                     "org.javarosa.xpath.expr.XPathStringLiteral",
                     "org.javarosa.xpath.expr.XPathUnionExpr",
                     "org.javarosa.xpath.expr.XPathVariableReference"};
+    
+    /**
+     * Global property for privileges
+     */
+    public static boolean isPassworded=false;
+    public static boolean isAdminAuthenticated = false;
 
 }

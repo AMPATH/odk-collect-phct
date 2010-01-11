@@ -18,7 +18,6 @@
 	<string name="main_menu_message">ODK Collect v1.1</string>
 	<string name="main_menu_details">Powered by ODK Collect</string>
 
-
 	<string name="enter_data">Enter New Data</string>
 	<string name="enter_data_button">Enter New Data (%s)</string>
 
@@ -32,9 +31,9 @@
 	<string name="review_data_button">Review Saved Data (%s)</string>
 
 	<string name="send_selected_data">Send Selected File(s)</string>
-	<string name="send_all_data">Send All Data</string>
+	<string name="send_all_data">Send All Data (%s)</string>
 
-	<string name="send_data">Send Completed Data</string>
+	<string name="send_data">Send Data</string>
 	<string name="send_data_button">Send Completed Data (%s)</string>
 
 	<string name="manage_files">Manage Files</string>
@@ -51,9 +50,6 @@
 
 	<string name="enter_url">Enter URL</string>
 
-	<string name="preferences">Server Preferences</string>
-	<string name="server_preferences">Server Preferences</string>
-
 	<string name="add_repeat">Add a \"%s\"?</string>
 	<string name="add_another_repeat">Add another \"%s\"?</string>
 
@@ -61,14 +57,12 @@
 	<string name="getting_location">Loading GPS...</string>
 	<string name="get_barcode">Capture Barcode</string>
 
-
 	<string name="form_load_error">Sorry, error loading %s</string>
 	<string name="barcode_scanner_error">Sorry, Barcode Scanner is not installed!</string>
 	<string name="gps_disabled_error">Sorry, GPS is disabled!</string>
 	<string name="required_answer_error">Sorry, this answer is required!</string>
 	<string name="invalid_answer_error">Sorry, this answer is invalid!</string>
-	<string name="no_forms_error">Sorry, there are no forms! Press Menu to add forms.
-	</string>
+	<string name="no_forms_error">Sorry, there are no forms! Press Menu to add forms.</string>
 
 	<string name="questionview_error">Sorry, you are not in a form yet!</string>
 	<string name="noselect_error">Sorry, you have not selected any items!</string>
@@ -93,21 +87,15 @@
 	<string name="download_some_failed">Sorry, %s item(s) not fetched!</string>
 	<string name="load_remote_form_error">Sorry, unable to load remote form list!</string>
 
-
 	<string name="readonly_question">This question is read only.</string>
 	<string name="file_deleted_error">Sorry, %s item(s) failed to delete!</string>
-	<string name="clearanswer_confirm">Are you sure you want to clear this answer?
-	</string>
+	<string name="clearanswer_confirm">Are you sure you want to clear this answer?</string>
 
 	<string name="delete_confirm">Are you sure you want to delete %s item(s)?
 	</string>
-	<string name="entry_exit_confirm">Going back will delete any unsaved data. Are you
-		sure?</string>
-	<string name="save_exit_confirm">Are you sure you want to save and exit? Your data
-		will be saved.</string>
-	<string name="complete_exit_confirm">Are you sure you want to finalize and exit? Your
-		data will be saved.</string>
-
+	<string name="entry_exit_confirm">Going back will delete any unsaved data. Are you sure?</string>
+	<string name="save_exit_confirm">Are you sure you want to save and exit? Your data will be saved.</string>
+	<string name="complete_exit_confirm">Are you sure you want to finalize and exit? Your data will be saved.</string>
 
 	<string name="delete_repeat_confirm">Are you sure you want to delete the repeated
 		element \"%s\" and all of its sub-elements?</string>
@@ -173,31 +161,48 @@
 	<string name="ack">Acknowledge</string>
 	<string name="acked">Acknowledged</string>
 
-
-	<string name="change_password">Change Password</string>
-	<string name="change_admin_password">Change Admin Password</string>
-	<string name="change_server">Change Server</string>
-	<string name="change_server_summary">Your server (required)</string>
-	<string name="change_user">Change Username</string>
-	<string name="change_user_summary">Your username (optional)</string>
-	<string name="change_password_summary">********</string>
-
-	<string name="default_server">http://open-data-kit.appspot.com</string>
-	<string name="password">Password</string>
-	<string name="server">Server</string>
-	<string name="username">Username</string>
-	<string name="admin_password">Admin Password</string>
-	<string name="default_admin_password">hctPassword</string>
-	
-
 	<string name="edit_saved_completed_data">Edit Saved or Finalized Data</string>
-
+	
 	<string name="welcome">Welcome to Ampath HCT</string>
 	<string name="login_form">Admin Login:</string>
 	<string name="hct_individuals">Household Persons</string>
 	<string name="hct_add_individual">Add Individual</string>
 	<string name="upload_data">Send Data to Server</string>
-	<string name="upload_error">Invalid login credentials (e.g. bad password or
-		wrong username),</string>
+	
+	<string name="global_preferences">Global Preferences</string>
+	<string name="user_preferences">User Preferences</string>
+	
+	<string name="server">Server</string>
+	<string name="change_server">Change Server</string>
+	<string name="default_server">http://open-data-kit.appspot.com</string>
+	<string name="change_server_summary">Your server (required)</string>
+	
+	<string name="username">Username</string>
+	<string name="change_username">Change Username</string>
+	<string name="change_user_summary">Your username</string>
+	
+	<string name="password">Password</string>
+	<string name="change_password">Change Password</string>
+	<string name="change_password_summary">********</string>
+	<string name="successful_password_change">Successfully changed Password</string>
+	<string name="error_changing_password">Error changing Password.</string>
+	<string name="invalid_password">Invalid Current Password</string>
+	
+	<string name="admin_password">Admin Password</string>
+	<string name="change_admin_password">Change Admin Password</string>
+	<string name="current_admin_password">Current Admin Password</string>
+	<string name="default_admin_password">odkCollect</string>
+	
+	<string name="password_application">Application Password</string>
+	<string name="application_password_on">Disable Application Password</string>
+	<string name="application_password_off">Enable Application Password</string>
+	<string name="application_password_admin_error">"Operation Unsuccessful, Set the Admin Password First!"</string>
+	<string name="application_password_user_error">"Operation Unsuccessful, Set the User Password First!"</string>
+
+	<string name="login">Login Required</string>
+	<string name="login_error">Login Failure. (check password and username)</string>
+	<string name="admin_login">Login as Admin</string>
+	<string name="access_denied">"Sorry! Access Restricted"</string>
+	
 
 </resources>
