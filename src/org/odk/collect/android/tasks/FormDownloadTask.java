@@ -20,6 +20,7 @@ import android.os.AsyncTask;
 
 import org.odk.collect.android.listeners.FormDownloaderListener;
 import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.logic.HCTSharedConstants;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -74,7 +75,7 @@ public class FormDownloadTask extends AsyncTask<String, Integer, ArrayList<Strin
 
 
     private boolean downloadFile(String url, String name) {
-
+    	System.out.println(url + "*************" + name);
         // create url
         URL u = null;
         try {
@@ -98,13 +99,16 @@ public class FormDownloadTask extends AsyncTask<String, Integer, ArrayList<Strin
             if (name.equals(formList)) {
                 f = new File(GlobalConstants.CACHE_PATH + name);
             } else {
-                String path = GlobalConstants.FORMS_PATH + name;
+            	String path = GlobalConstants.FORMS_PATH + name;
+            	if (!name.matches(GlobalConstants.VALID_FILENAME))
+            		path=HCTSharedConstants.SPECIAL_FILES_PATH + name;
                 int i = 2;
                 int slash = path.lastIndexOf("/") + 1;
                 int period = path.lastIndexOf(".") + 1;
                 String base = path.substring(0, slash - 1);
                 String filename = path.substring(slash, period - 1);
                 String ext = path.substring(period);
+                
                 f = new File(path);
                 while (f.exists()) {
                     f = new File(base + "/" + filename + " " + i + "." + ext);

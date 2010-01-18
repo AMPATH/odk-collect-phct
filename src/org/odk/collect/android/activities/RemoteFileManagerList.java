@@ -142,8 +142,10 @@ public class RemoteFileManagerList extends ListActivity implements FormDownloade
                 formCount = formElements.getLength();
                 for (int i = 0; i < formCount; i++) {
                     Node n = formElements.item(i);
-                    mFormName.add(n.getChildNodes().item(0).getNodeValue() + ".xml");
-                    mFormUrl.add(n.getAttributes().item(0).getNodeValue());
+                    String url = n.getAttributes().item(0).getNodeValue();
+                    mFormUrl.add(url);
+                    String ext = url.substring(url.lastIndexOf("."));
+                    mFormName.add(n.getChildNodes().item(0).getNodeValue() + ext);
                 }
             }
             // create file adapter and create view

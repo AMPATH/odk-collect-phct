@@ -166,7 +166,7 @@ public class LookUpWidget extends LinearLayout implements IQuestionWidget {
      */
     public String [] getVillages() {
     	String villages [];
-    	String filePath = HCTSharedConstants.SPECIAL_FILES_PATH + "villages.hct";
+    	String filePath = HCTSharedConstants.SPECIAL_FILES_PATH + "villages.csv";
 		//...check if villages file exists
 		File villageFile=new File(filePath);
 		if (!villageFile.exists())

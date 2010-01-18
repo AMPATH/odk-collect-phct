@@ -73,7 +73,7 @@ public class InstanceUploaderActivity extends Activity implements InstanceUpload
             // setup dialog and upload task
             showDialog(PROGRESS_DIALOG);
             mInstanceUploaderTask = new InstanceUploaderTask();
-            mInstanceUploaderTask.setUploadServer(url);
+            mInstanceUploaderTask.setUploadServer(url + "/fileUpload");
             mInstanceUploaderTask.setAuthCredentials(authCredentials);
             totalCount = instances.size();
             
