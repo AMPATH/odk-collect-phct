@@ -103,14 +103,14 @@ public class UniqueFunction implements IFunctionHandler {
 	}
 	
     private  boolean confirmNewID(String idType, String id){
-    	
-    	//Finalizing a form: No need checking
+    	boolean isNew=false;
+    	//Finalizing a form
     	if (HCTSharedConstants.finalizing) {
     		if (HCTSharedConstants.savedForm && idType.equalsIgnoreCase(HCTSharedConstants.HOUSEHOLD)
     				&& (HCTSharedConstants.householdId==null || HCTSharedConstants.householdId.trim()==""))
-    			return confirmNewHousehold(idType, id);
+    			isNew = confirmNewHousehold(idType, id);
     		else
-    			return true;
+    			isNew = true;
     	}
     		
     	
@@ -120,14 +120,14 @@ public class UniqueFunction implements IFunctionHandler {
 		
 		//EITHER: confirm new household
 		if (idType.equals(HCTSharedConstants.HOUSEHOLD))
-			return confirmNewHousehold(idType, id);
+			isNew = confirmNewHousehold(idType, id);
 		
 		//OR: confirm new individual
 		if (idType.equals(HCTSharedConstants.INDIVIDUAL))
-			return confirmNewIndividual(idType, id);
+			isNew = confirmNewIndividual(idType, id);
     	
 		mDbAdapter.close();
-		return false;
+		return isNew;
     }
     
     private boolean inTemp(String id){

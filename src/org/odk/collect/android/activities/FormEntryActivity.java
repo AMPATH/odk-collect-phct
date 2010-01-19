@@ -294,7 +294,6 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		menu.removeItem(MENU_HELP_TEXT);
 		menu.removeItem(MENU_HCT_INDIVIDUALS);
 
-		//
 		MenuItem mi = null;
 		if (currentPromptIsStart()) {
 			mi = menu.add(0, MENU_LANGUAGES, 0,
@@ -1103,26 +1102,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		}
 		super.onResume();
 	}
-	
-	
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        // we use dispatchKeyEvent because it happens first.
-        //onKeyDown/Up lets all the views have the event first.
-    	
-        if (event.getKeyCode() == KeyEvent.KEYCODE_ENTER
-                && event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (event.isShiftPressed())
-                showPreviousView();
-            else
-                showNextView();
-            return true;
-        }
-        return super.dispatchKeyEvent(event);
- 
-    }
-    
-    
+  
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -1137,6 +1117,23 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		}
 		return super.onKeyDown(keyCode, event);
 	}
+
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onKeyUp(int, android.view.KeyEvent)
+	 */
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_ENTER:
+			if (event.isShiftPressed())
+                showPreviousView();
+            else
+                showNextView();
+            return true;
+		}
+		return super.onKeyUp(keyCode, event);
+	}
+	
 
 	/*
 	 * (non-Javadoc)

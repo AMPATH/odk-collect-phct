@@ -16,26 +16,30 @@
 
 package org.odk.collect.android.widgets;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import org.javarosa.core.model.data.GeoPointData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.logic.PromptElement;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 
 /**
@@ -51,9 +55,11 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
     private TextView mAnswerDisplay;
 
     private ProgressDialog mLocationDialog;
+    private AlertDialog mAlertDialog;
     private LocationManager mLocationManager;
     private LocationListener mLocationListener;
     private Location mLocation;
+    
 
 
     public GeoPointWidget(Context context) {
@@ -170,10 +176,11 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
                 // close gps dialogs, alert user, stop gps
                 public void onProviderDisabled(String provider) {
                     stopGPS();
+                    createAlert(); /*
                     Toast
                             .makeText(getContext(),
                                     getContext().getString(R.string.gps_disabled_error),
-                                    Toast.LENGTH_SHORT).show();
+                                    Toast.LENGTH_SHORT).show();*/
                 }
 
 
@@ -245,9 +252,31 @@ public class GeoPointWidget extends LinearLayout implements IQuestionWidget {
     	return degree;
 	}
 
+	private void createAlert() {
+		mAlertDialog = new AlertDialog.Builder(this.getContext()).create();
+		mAlertDialog.setTitle("GPS Disabled");
+		mAlertDialog.setMessage("Click 'Enable' to enable GPS" );
+		DialogInterface.OnClickListener listListener = new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int i) {
+				switch (i) {
+				case AlertDialog.BUTTON1:
+					Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+					((Activity) getContext()).startActivity(intent);
+					break;
+				}
+			}
+		};
+		mAlertDialog.setCancelable(false);
+		mAlertDialog.setButton("Enable", listListener);
+		mAlertDialog.setButton2("Cancel", listListener);
+		mAlertDialog.show();
+	}
 
 	public void setFocus(Context context) {
-		// TODO Auto-generated method stub
-		
+		// Hide the soft keyboard if it's showing.
+        InputMethodManager inputManager =
+                (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getWindowToken(), 0);
 	}
 }

@@ -161,7 +161,7 @@ public class LookUpWidget extends LinearLayout implements IQuestionWidget {
     }
     
     /**
-     * Opens a csv file of format "[string],[string],[string]" and
+     * Opens a csv file of format "[string],[string],[string],[string]" and
      * @return A string array of names of villages
      */
     public String [] getVillages() {

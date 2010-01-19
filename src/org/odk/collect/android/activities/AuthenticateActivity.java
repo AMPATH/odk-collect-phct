@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.InputType;
@@ -100,6 +101,7 @@ public class AuthenticateActivity extends Activity {
     	password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
     	password.setTransformationMethod(android.text.method.PasswordTransformationMethod.getInstance());
     	adminCheck.setText(R.string.admin_login);
+    	adminCheck.setTextColor(Color.WHITE);
     	layout.addView(password);
     	layout.addView(adminCheck);
     	
