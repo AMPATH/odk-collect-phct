@@ -46,6 +46,7 @@ public class InstanceUploaderList extends ListActivity {
 
     private static final int MENU_UPLOAD_ALL = Menu.FIRST;
     private static final int MENU_PREFS=Menu.FIRST + 1;
+    private static final int MENU_UPLOAD_USB=Menu.FIRST + 2;
 
     private SimpleCursorAdapter mInstances;
 
@@ -118,6 +119,8 @@ public class InstanceUploaderList extends ListActivity {
         super.onCreateOptionsMenu(menu);
         menu.add(0, MENU_UPLOAD_ALL, 0, R.string.send_data).setIcon(
                 R.drawable.ic_menu_send);
+        menu.add(0, MENU_UPLOAD_USB, 0, "Send Over USB").setIcon(
+                R.drawable.ic_menu_send);
         menu.add(0, MENU_PREFS, 0, getString(R.string.user_preferences)).setIcon(
                 android.R.drawable.ic_menu_preferences);
         return true;
@@ -129,7 +132,10 @@ public class InstanceUploaderList extends ListActivity {
         switch (item.getItemId()) {
             case MENU_UPLOAD_ALL:
                 uploadAllData();
-                return true;
+                break;
+            case MENU_UPLOAD_USB:
+                uploadOverUsb();
+                break;
             case MENU_PREFS:
                 createPreferencesMenu();
                 return true;
@@ -137,7 +143,26 @@ public class InstanceUploaderList extends ListActivity {
         return super.onMenuItemSelected(featureId, item);
     }
 
-    private void createPreferencesMenu() {
+    private void uploadOverUsb() {
+    	// paths to upload
+        ArrayList<String> allInstances = new ArrayList<String>();
+
+        Cursor c = null;
+
+        for (int i = 0; i < mInstances.getCount(); i++) {
+            c = (Cursor) getListAdapter().getItem(i);
+            String s = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
+            System.out.println(s);
+            allInstances.add(s);
+        }
+
+        if (c != null) {
+            c.close();
+        }
+	}
+
+
+	private void createPreferencesMenu() {
         Intent i = new Intent(this, UserPreferences.class);
         startActivity(i);
     }

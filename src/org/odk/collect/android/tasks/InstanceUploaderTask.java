@@ -113,6 +113,7 @@ public class InstanceUploaderTask extends AsyncTask<String, Integer, ArrayList<S
 
             // prepare response and return uploaded
             HttpResponse response = null;
+            System.out.println(mUrl);
             try {
                 response = httpclient.execute(httppost);
             } catch (ClientProtocolException e) {

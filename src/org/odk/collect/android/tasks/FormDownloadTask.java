@@ -75,7 +75,6 @@ public class FormDownloadTask extends AsyncTask<String, Integer, ArrayList<Strin
 
 
     private boolean downloadFile(String url, String name) {
-    	System.out.println(url + "*************" + name);
         // create url
         URL u = null;
         try {
