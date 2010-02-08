@@ -119,7 +119,7 @@ public class InstanceUploaderList extends ListActivity {
         super.onCreateOptionsMenu(menu);
         menu.add(0, MENU_UPLOAD_ALL, 0, R.string.send_data).setIcon(
                 R.drawable.ic_menu_send);
-        menu.add(0, MENU_UPLOAD_USB, 0, "Send Over USB").setIcon(
+        menu.add(0, MENU_UPLOAD_USB, 0, "Sync Over USB").setIcon(
                 R.drawable.ic_menu_send);
         menu.add(0, MENU_PREFS, 0, getString(R.string.user_preferences)).setIcon(
                 android.R.drawable.ic_menu_preferences);
@@ -159,6 +159,10 @@ public class InstanceUploaderList extends ListActivity {
         if (c != null) {
             c.close();
         }
+        
+        Intent i = new Intent(this, InstanceUsbSyncActivity.class);
+        i.putExtra(GlobalConstants.KEY_INSTANCES, allInstances);
+        startActivity(i);
 	}
 
 
@@ -172,6 +176,4 @@ public class InstanceUploaderList extends ListActivity {
         super.onResume();
         buildView();
     }
-
-
 }

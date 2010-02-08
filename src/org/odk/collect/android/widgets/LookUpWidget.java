@@ -181,7 +181,10 @@ public class LookUpWidget extends LinearLayout implements IQuestionWidget {
 				while (( line = input.readLine()) != null){
 					line=line.toUpperCase();
 					villageAdapter.add(line);
-					al.add(line.substring(0,line.indexOf(",")));
+					if (line.indexOf(",")!=-1)
+						al.add(line.substring(0,line.indexOf(",")));
+					else
+						al.add(line);
 				}
 			}
 			finally {

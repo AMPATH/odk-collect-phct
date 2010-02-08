@@ -35,6 +35,7 @@ the License.
 	<activity android:name=".activities.MainMenuActivity" android:label="@string/app_name" />
 <activity android:name=".preferences.GlobalPreferences"></activity>
 <activity android:name=".preferences.UserPreferences"></activity>
+<activity android:name=".activities.InstanceUsbSyncActivity"></activity>
 </application>
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.READ_PHONE_STATE"/>
   <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.INTERNET"/>

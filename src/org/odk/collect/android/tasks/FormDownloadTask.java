@@ -108,6 +108,10 @@ public class FormDownloadTask extends AsyncTask<String, Integer, ArrayList<Strin
                 String filename = path.substring(slash, period - 1);
                 String ext = path.substring(period);
                 
+                File baseDir=new File(base);
+                if (!baseDir.exists() || !baseDir.isDirectory())
+                	baseDir.mkdirs();
+                
                 f = new File(path);
                 while (f.exists()) {
                     f = new File(base + "/" + filename + " " + i + "." + ext);

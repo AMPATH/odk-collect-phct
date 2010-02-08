@@ -79,6 +79,8 @@ public class GlobalConstants {
      * Temp path
      */
     public static final String CACHE_PATH = "/sdcard/odk/.cache/";
+    
+    public static final String USBSYNC_PATH = "/sdcard/odk/.usbsync/";
 
 
     /**
