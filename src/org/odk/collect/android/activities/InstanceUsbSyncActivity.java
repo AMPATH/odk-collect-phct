@@ -93,7 +93,6 @@ public class InstanceUsbSyncActivity extends Activity {
           File f2 = new File(dtFile);
           InputStream in = new FileInputStream(f1);
           
-          //For Overwrite the file.
           OutputStream out = new FileOutputStream(f2);
 
           byte[] buf = new byte[1024];

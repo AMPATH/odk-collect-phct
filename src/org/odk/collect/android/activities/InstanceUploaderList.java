@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 /**
  * Responsible for displaying all the valid forms in the forms directory. Stores
@@ -145,6 +146,13 @@ public class InstanceUploaderList extends ListActivity {
 
     private void uploadOverUsb() {
     	// paths to upload
+    	if (GlobalConstants.isPassworded) {
+	    	if (!GlobalConstants.isAdminAuthenticated) {
+	    		Toast.makeText(this, R.string.access_denied, Toast.LENGTH_SHORT).show();
+	    		return;
+	    	}
+    	}
+    	
         ArrayList<String> allInstances = new ArrayList<String>();
 
         Cursor c = null;

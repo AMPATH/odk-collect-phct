@@ -45,6 +45,7 @@ public class LocalFileManagerList extends ListActivity {
 
     // delete an item
     private static final int MENU_DELETE = Menu.FIRST;
+    private static final int MENU_UNCOMPLETE = Menu.FIRST + 1;
 
     private AlertDialog mAlertDialog;
 
@@ -90,6 +91,8 @@ public class LocalFileManagerList extends ListActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, MENU_DELETE, 0, getString(R.string.delete_file)).setIcon(
                 android.R.drawable.ic_menu_delete);
+        menu.add(0, MENU_UNCOMPLETE, 0, getString(R.string.mark_incomplete)).setIcon(
+                R.drawable.reload);
         return true;
     }
 
@@ -107,11 +110,48 @@ public class LocalFileManagerList extends ListActivity {
                             Toast.LENGTH_SHORT).show();
                 }
                 return true;
+            case MENU_UNCOMPLETE:
+                if (mSelected.size() > 0) {
+                    // items selected
+                    createMarkIncompleteDialog();
+                } else {
+                    // no items selected
+                    Toast.makeText(getApplicationContext(), getString(R.string.noselect_error),
+                            Toast.LENGTH_SHORT).show();
+                }
+                return true;
         }
         return super.onMenuItemSelected(featureId, item);
     }
 
+    /**
+     * Create the mark as incomplete dialog
+     */
+    private void createMarkIncompleteDialog() {
+        mAlertDialog = new AlertDialog.Builder(this).create();
 
+        mAlertDialog.setMessage(getString(R.string.mark_incomplete_confirm, mSelected.size()));
+        DialogInterface.OnClickListener dialogYesNoListener =
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int i) {
+                        switch (i) {
+                            case DialogInterface.BUTTON1: // mark incomplete and
+                                MarkSelectedFilesIncomplete();
+                                refreshData();
+                                break;
+                            case DialogInterface.BUTTON2: // do nothing
+                                break;
+                        }
+                    }
+
+
+                };
+        mAlertDialog.setCancelable(false);
+        mAlertDialog.setButton(getString(R.string.yes), dialogYesNoListener);
+        mAlertDialog.setButton2(getString(R.string.no), dialogYesNoListener);
+        mAlertDialog.show();
+    }
+    
     /**
      * Create the file delete dialog
      */
@@ -186,7 +226,44 @@ public class LocalFileManagerList extends ListActivity {
         }
 
     }
+    
+   /**
+    * Deletes the selected files.First from the database then from the file
+    * system
+    */
+   private void MarkSelectedFilesIncomplete() {
 
+       FileDbAdapter fda = new FileDbAdapter(this);
+       fda.open();
+
+       // mark selected files as incomplete
+       int marked = 0;
+       for (int i = 0; i < mSelected.size(); i++) {
+    	   Cursor c = fda.fetchFile(mSelected.get(i));
+           startManagingCursor(c);
+           String s = c.getString(c.getColumnIndex(FileDbAdapter.KEY_FILEPATH));
+           
+    	   if (c.getString(c.getColumnIndex(FileDbAdapter.KEY_TYPE)).equals(FileDbAdapter.TYPE_INSTANCE)) {
+    		   fda.updateFile(s, FileDbAdapter.STATUS_SAVED, null);
+    		   marked++;
+    	   }
+        	   
+       }
+       
+       fda.close();
+
+       if (marked > 0) {
+           // all OR some updates  were successful
+           Toast.makeText(getApplicationContext(), "Successfully marked " + marked + " files",
+                   Toast.LENGTH_SHORT).show();
+           finish();
+       } else {
+           // all failed
+           Toast.makeText(
+                   getApplicationContext(),"Operation Failed", Toast.LENGTH_LONG).show();
+       }
+
+   }
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {

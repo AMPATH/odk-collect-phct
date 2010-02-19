@@ -47,14 +47,21 @@ public class UniqueFunction implements IFunctionHandler {
 	}
 	
 	private boolean confirmNewIndividual(String idType, String id){
-		boolean unique=false;
 		String fullId=idType + ": " + id;
 		if (HCTSharedConstants.currentIndividual==null){
+			//  check a saved form
+			if (HCTSharedConstants.savedForm) {
+				// ensure id is not changed 
+				if (mDbAdapter.confirmNewID(idType,id))
+					return false;
+				else
+					return true;
+			}
 			//A new individual being created
 			if (mDbAdapter.confirmNewID(idType,id) && !inTemp(fullId)){
 				HCTSharedConstants.tempIDs.add(fullId);
 				HCTSharedConstants.currentIndividual=fullId;
-				unique= true;
+				return true;
 			}
 		}
 		else {
@@ -62,9 +69,9 @@ public class UniqueFunction implements IFunctionHandler {
 			HCTSharedConstants.tempIDs.remove(HCTSharedConstants.currentIndividual);
 			HCTSharedConstants.tempIDs.add(fullId);
 			HCTSharedConstants.currentIndividual=fullId;
-			unique=true;
+			return true;
 		}
-		return unique;
+		return false;
 	}
 	
 	private boolean confirmNewHousehold(String idType, String id){

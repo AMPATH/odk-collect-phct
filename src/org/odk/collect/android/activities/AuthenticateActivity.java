@@ -29,7 +29,7 @@ public class AuthenticateActivity extends Activity {
     private static final int GLOBAL_PREFERENCES = Menu.FIRST + 1;
     private static final String KEY_APPLICATION_PASSWORD="application_password";
     private static final String KEY_PASSWORD="password";
-    private static final String KEY_ADMIN_PASSWORD="password";
+    private static final String KEY_ADMIN_PASSWORD="admin_password";
     private static String userPassword;
     private static String adminPassword; 
     private static SharedPreferences sp;
