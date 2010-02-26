@@ -14,32 +14,33 @@ License for the specific language governing permissions and limitations under
 the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.odk.collect.android" android:versionCode="2" android:versionName="1.1.0">
-  <application android:label="@string/app_name" android:theme="@android:style/Theme.Light" android:icon="@drawable/main_icon">
-  <activity android:label="@string/app_name" android:name=".activities.AuthenticateActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-        <category android:name="android.intent.category.DEFAULT"/>
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
-    </activity>
-    <activity android:name=".activities.FormEntryActivity" android:label="@string/app_name" android:theme="@android:style/Theme.Light" />
-    <activity android:name=".activities.InstanceChooserList" android:label="@string/app_name"/>
-    <activity android:name=".activities.InstanceChooserTabs" android:label="@string/app_name"/>
-    <activity android:name=".activities.FormChooserList" android:label="@string/app_name"/>
-    <activity android:name=".activities.LocalFileManagerList" android:label="@string/app_name"/>
-    <activity android:name=".activities.RemoteFileManagerList" android:label="@string/app_name"/>
-    <activity android:name=".activities.FileManagerTabs" android:label="@string/app_name"/>
-    <activity android:name=".activities.InstanceUploaderList" android:label="@string/app_name"/>
-    <activity android:name=".activities.InstanceUploaderActivity" android:label="@string/app_name"/>
- 	<activity android:name=".activities.FormHierarchyActivity" android:label="@string/app_name"/>
-	<activity android:name=".activities.MainMenuActivity" android:label="@string/app_name" />
-<activity android:name=".preferences.GlobalPreferences"></activity>
-<activity android:name=".preferences.UserPreferences"></activity>
-<activity android:name=".activities.InstanceUsbSyncActivity"></activity>
-</application>
-  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.READ_PHONE_STATE"/>
-  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.INTERNET"/>
-  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.ACCESS_SURFACE_FLINGER"/>
-  <uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.ACCESS_FINE_LOCATION"/>
-<uses-sdk android:minSdkVersion="4"></uses-sdk>
+	<application android:label="@string/app_name" android:theme="@android:style/Theme.Light" android:icon="@drawable/main_icon">
+		<activity android:label="@string/app_name" android:name=".activities.AuthenticateActivity">
+			<intent-filter>
+			  <action android:name="android.intent.action.MAIN"/>
+			  <category android:name="android.intent.category.DEFAULT"/>
+			  <category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+		</activity>
+		<activity android:name=".activities.FormEntryActivity" android:label="@string/app_name" android:theme="@android:style/Theme.Light" />
+		<activity android:name=".activities.InstanceChooserList" android:label="@string/app_name"/>
+		<activity android:name=".activities.InstanceChooserTabs" android:label="@string/app_name"/>
+		<activity android:name=".activities.FormChooserList" android:label="@string/app_name"/>
+		<activity android:name=".activities.LocalFileManagerList" android:label="@string/app_name"/>
+		<activity android:name=".activities.RemoteFileManagerList" android:label="@string/app_name"/>
+		<activity android:name=".activities.FileManagerTabs" android:label="@string/app_name"/>
+		<activity android:name=".activities.InstanceUploaderList" android:label="@string/app_name"/>
+		<activity android:name=".activities.InstanceUploaderActivity" android:label="@string/app_name"/>
+		<activity android:name=".activities.FormHierarchyActivity" android:label="@string/app_name"/>
+		<activity android:name=".activities.MainMenuActivity" android:label="@string/app_name" />
+		<activity android:name=".preferences.GlobalPreferences"></activity>
+		<activity android:name=".preferences.UserPreferences"></activity>
+		<activity android:name=".activities.InstanceUsbSyncActivity"></activity>
+	</application>
+	<uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.READ_PHONE_STATE"/>
+	<uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.INTERNET"/>
+	<uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.ACCESS_SURFACE_FLINGER"/>
+	<uses-permission xmlns:android="http://schemas.android.com/apk/res/android" android:name="android.permission.ACCESS_FINE_LOCATION"/>
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+	<uses-sdk android:minSdkVersion="4"></uses-sdk>
 </manifest>
