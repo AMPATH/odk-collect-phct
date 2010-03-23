@@ -184,6 +184,24 @@ public class HCTDbAdapter {
         }
         return mCursor;
     }
+    
+    /**
+     * Return a Cursor positioned at the ID given
+     * 
+     * @param tableName
+     * @param itemId id of note to retrieve
+     * @return true if id is not found
+     * @throws SQLException
+     */
+    public Cursor getPerson(String tableName, String personName) throws SQLException {
+    	Cursor mCursor = null;
+    	mCursor = mDb.query(true, tableName, new String[] {KEY_ROWID}, KEY_PERSON_NAME + " like'" + personName + "'", null, null, null, null, null);
+    	if (mCursor.getCount()<1) {
+   		   mCursor.close();
+   		   return null;
+    	}
+    	return mCursor;
+    }
 
     /**
      * Return a Cursor positioned at the ID given
@@ -218,4 +236,21 @@ public class HCTDbAdapter {
  
     	mDb.insert(tableName, null, args);
     }
+    
+    /**
+     * Update file in the database. Updates the date modified.
+     * 
+     * @param path path to the file
+     * @param status status of the file
+     * @return number of affected rows
+     */
+    public boolean updateRecord(String tablename, String row_id, String rowName, String rowValue) {
+
+        ContentValues cv = new ContentValues();
+      
+        cv.put(rowName, rowValue);
+        
+        return mDb.update(tablename, cv, KEY_ROWID + "='" + row_id + "'", null) > 0;
+    }
+
 }

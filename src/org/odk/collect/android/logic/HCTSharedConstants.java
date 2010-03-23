@@ -64,6 +64,7 @@ public class HCTSharedConstants {
 	//TODO variables for unique function 
 	//Need a better way of doing this 
 	public static boolean savedForm = false;
+	public static boolean newIndivOnSavedForm = false;
 	public static String savedFormName = null;
 	public static boolean finalizing = false;
 
@@ -103,17 +104,21 @@ public class HCTSharedConstants {
 					mDbAdapter.insertHousehold(table, id, householdHeadId, null); 
 			}
 
-			if (table.equals(INDIVIDUAL)) {
-				String name=null;
-				//get individual names
-				for (int j = 0; j < tempDB.size(); j++) {
-					if (tempDB.get(j).startsWith(id))
-						name=tempDB.get(j).substring(tempDB.get(j).indexOf(" "));		
-				}
-				mDbAdapter.insertIndividual(table, id, strTemp,name);
-			}
+			if (table.equals(INDIVIDUAL))
+				mDbAdapter.insertIndividual(table, id, strTemp,getPersonName(id));
 		}
 		mDbAdapter.close();
+	}
+	
+	public static String getPersonName(String id) {
+		if (tempDB != null) {
+			for (int j = 0; j < tempDB.size(); j++) {
+				if (tempDB.get(j).startsWith(id))
+					return tempDB.get(j).substring(tempDB.get(j).indexOf(" "));
+			}
+		}
+		return null;
+		
 	}
 	
 	public static void saveNames() {
@@ -139,7 +144,7 @@ public class HCTSharedConstants {
 		currentIndividual=householdHeadId=givenname=
 		middlename=familyname=householdId=	savedFormName=null;
 		
-		savedForm=finalizing=false;
+		savedForm=finalizing=newIndivOnSavedForm=false;
 	}
 	
 	/**

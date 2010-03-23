@@ -543,6 +543,15 @@ public class FormHandler {
             return true;
         }
     }
+    
+    /**
+     * Runs post processing handlers. Necessary to get end time.
+     */
+    public void postProcessForm() {
+
+        mForm.postProcessModel();
+
+    }
 
 
     /**

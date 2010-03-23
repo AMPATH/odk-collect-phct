@@ -16,6 +16,11 @@
 
 package org.odk.collect.android.activities;
 
+import java.util.ArrayList;
+
+import org.odk.collect.android.R;
+import org.odk.collect.android.database.FileDbAdapter;
+
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -28,11 +33,6 @@ import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
-
-import org.odk.collect.android.R;
-import org.odk.collect.android.database.FileDbAdapter;
-
-import java.util.ArrayList;
 
 /**
  * Responsible for displaying and deleting all the valid forms in the forms

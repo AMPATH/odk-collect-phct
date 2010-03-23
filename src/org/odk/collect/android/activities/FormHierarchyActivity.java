@@ -1,10 +1,31 @@
+/*
+ * Copyright (C) 2009 University of Washington
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package org.odk.collect.android.activities;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Vector;
+import android.app.AlertDialog;
+import android.app.ListActivity;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ListView;
 
 import org.javarosa.core.model.Constants;
 import org.javarosa.core.model.FormDef;
@@ -22,16 +43,11 @@ import org.odk.collect.android.adapters.HierarchyListAdapter;
 import org.odk.collect.android.logic.FormHandler;
 import org.odk.collect.android.logic.HierarchyElement;
 
-import android.app.AlertDialog;
-import android.app.ListActivity;
-import android.content.DialogInterface;
-import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ListView;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
 
 /**
  * 
@@ -66,15 +82,12 @@ public class FormHierarchyActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hierarchy_layout);
 
-
         // We'll use formhandler to set the CurrentIndex before returning to
         // FormEntryActivity
         FormHandler mFormHandler = FormEntryActivity.mFormHandler;
-
         mForm = mFormHandler.getForm();
 
         setTitle(getString(R.string.app_name) + " > " + mFormHandler.getFormTitle());
-
 
         mCurrentIndex = mFormHandler.getIndex();
         if (mCurrentIndex.isBeginningOfFormIndex()) {
@@ -85,15 +98,7 @@ public class FormHierarchyActivity extends ListActivity {
         mBackButton = (Button) findViewById(R.id.backbutton);
         mBackButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                Log.e("carl", "clicked back");
                 mCurrentIndex = stepIndexOut(mCurrentIndex);
-                /*
-                 * Log.e("carl", "mCurrentIndex = " + mCurrentIndex);
-                 * Log.e("Carl", "local index = " +
-                 * mCurrentIndex.getLocalIndex()); Log.e("carl",
-                 * "instance index = " + mCurrentIndex.getInstanceIndex());
-                 */
-
                 if (mCurrentIndex == null || indexIsBeginning(mCurrentIndex)) {
                     mCurrentIndex = FormIndex.createBeginningOfFormIndex();
                     mCurrentIndex = mForm.incrementIndex(mCurrentIndex);
@@ -109,11 +114,9 @@ public class FormHierarchyActivity extends ListActivity {
                     FormIndex tempIndex;
                     boolean done = false;
                     while (!done) {
-                        Log.e("carl", "stepping in loop");
                         tempIndex = mCurrentIndex;
                         int i = 0;
                         while (tempIndex.getNextLevel() != null && i < level) {
-                            Log.e("carl", "stepping in next level");
                             tempIndex = tempIndex.getNextLevel();
                             i++;
                         }
@@ -122,13 +125,8 @@ public class FormHierarchyActivity extends ListActivity {
                         } else {
                             mCurrentIndex = prevIndex(mCurrentIndex);
                         }
-                        // Log.e("carl", "temp instance = " +
-                        // tempIndex.getInstanceIndex());
+
                     }
-                    Log.e("carl", "now showing : " + mCurrentIndex);
-                    Log
-                            .e("Carl", "now shoing instance index = "
-                                    + mCurrentIndex.getInstanceIndex());
                 }
                 refreshView();
 
@@ -137,7 +135,6 @@ public class FormHierarchyActivity extends ListActivity {
             }
         });
 
-
         Button jumpButton = (Button) findViewById(R.id.jumpbutton);
         jumpButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -145,7 +142,6 @@ public class FormHierarchyActivity extends ListActivity {
             }
         });
         refreshView();
-
     }
 
 
@@ -167,24 +163,21 @@ public class FormHierarchyActivity extends ListActivity {
                             }
                         }).create();
         mJumpDialog.show();
-
-
     }
 
 
     /*
-     * This is a very not ideal way to do this, but JR needs to have some mechanism detect the 
-     * 'level' of an index and it doesn't right now.
-     * This basically turns a formindex to a string and checks to see if it contains two commas and an underscore.
-     * If there's no underscore you're at the root level of a form (ie 8, 0, 0, 0).  
-     * If there is, you're probably in an instance of a repeated group (ie 3, 2_0, 0).
+     * This is a very not ideal way to do this, but JR needs to have some
+     * mechanism detect the 'level' of an index and it doesn't right now. This
+     * basically turns a formindex to a string and checks to see if it contains
+     * two commas and an underscore. If there's no underscore you're at the root
+     * level of a form (ie 8, 0, 0, 0). If there is, you're probably in an
+     * instance of a repeated group (ie 3, 2_0, 0).
      */
     private boolean indexIsBeginning(FormIndex fi) {
         String startTest = fi.toString();
         int firstComma = startTest.indexOf(",");
-        Log.e("carl", "firstcomma found at " + firstComma);
         int secondComma = startTest.indexOf(",", firstComma + 1);
-        Log.e("carl", "secondcomma found at " + secondComma);
         int underscore = startTest.indexOf("_");
         boolean beginning = (secondComma == -1 || underscore == -1);
         return beginning;
@@ -211,14 +204,12 @@ public class FormHierarchyActivity extends ListActivity {
         int level = 0;
         String repeatGroup = "-1";
 
-        Log.e("Carl", "just checking at beginnig " + currentIndex);
         if (!beginning) {
             FormIndex levelTest = currentIndex;
             while (levelTest.getNextLevel() != null) {
                 level++;
                 levelTest = levelTest.getNextLevel();
             }
-            Log.e("Carl", "level is: " + level);
 
             boolean found = false;
             while (!found) {
@@ -226,8 +217,6 @@ public class FormHierarchyActivity extends ListActivity {
                 for (int i = 0; i < level; i++) {
                     localTest = localTest.getNextLevel();
                 }
-                Log.e("carl", "localtest local = " + localTest.getLocalIndex() + " and instance = "
-                        + localTest.getInstanceIndex());
                 if (localTest.getLocalIndex() == 0)
                     found = true;
                 else
@@ -236,21 +225,13 @@ public class FormHierarchyActivity extends ListActivity {
 
             // we're displaying only things only within a given group
             FormIndex prevIndex = prevIndex(currentIndex);
-            Log.e("Carl", "local = " + prevIndex.getLocalIndex() + " and instance = "
-                    + prevIndex.getInstanceIndex());
+
             displayGroup = mForm.getChildInstanceRef(prevIndex).toString(false);
-            Log.e("carl", "display group is: " + displayGroup);
 
             mBackButton.setEnabled(true);
-
         } else {
-            Log.e("carl", "at beginning");
             currentIndex = FormIndex.createBeginningOfFormIndex();
             currentIndex = nextRelevantIndex(currentIndex);
-            Log
-                    .e("carl", "index is now "
-                            + mForm.getChildInstanceRef(currentIndex).toString(false));
-            Log.e("carl", "index # is " + currentIndex);
             mBackButton.setEnabled(false);
         }
 
@@ -260,11 +241,8 @@ public class FormHierarchyActivity extends ListActivity {
         while (!isEnd(currentIndex)) {
             FormIndex normalizedLevel = currentIndex;
             for (int i = 0; i < level; i++) {
-            		normalizedLevel = normalizedLevel.getNextLevel();
-            		Log.e("carl", "incrementing normalized level");
+                normalizedLevel = normalizedLevel.getNextLevel();
             }
-            Log.e("carl", "index # is: " + currentIndex + " for: "
-                    + mForm.getChildInstanceRef(currentIndex).toString(false));
 
             IFormElement e = mForm.getChild(currentIndex);
             String currentGroupName = mForm.getChildInstanceRef(currentIndex).toString(false);
@@ -279,9 +257,6 @@ public class FormHierarchyActivity extends ListActivity {
             // elements in the index
             // that are just members of the current group.
             if (currentGroupName.startsWith(repeatGroup)) {
-                Log.e("carl", "testing: " + repeatIndex + " against: "
-                        + normalizedLevel.getInstanceIndex());
-
                 // the last repeated group doesn't exist, so make sure the next
                 // item is still in the group.
                 FormIndex nextIndex = nextRelevantIndex(currentIndex);
@@ -291,7 +266,7 @@ public class FormHierarchyActivity extends ListActivity {
                         && nextIndexName.startsWith(repeatGroup)) {
 
                     repeatIndex = normalizedLevel.getInstanceIndex();
-                    Log.e("Carl", "adding new group: " + currentGroupName + " in repeat");
+
                     HierarchyElement h = formList.get(formList.size() - 1);
                     h.AddChild(new HierarchyElement(mIndent + repeatedGroupName + " "
                             + groupCount++, "", null, Color.LTGRAY, CHILD, currentIndex));
@@ -313,9 +288,6 @@ public class FormHierarchyActivity extends ListActivity {
                     // before
                     repeatGroup = currentGroupName;
                     repeatIndex = normalizedLevel.getInstanceIndex();
-                    Log.e("carl", "found new repeat: " + repeatGroup + " with instance index: "
-                            + repeatIndex);
-
                     FormIndex nextIndex = nextRelevantIndex(currentIndex);
                     if (nextIndex.isEndOfFormIndex()) break;
                     String nextIndexName = mForm.getChildInstanceRef(nextIndex).toString(false);
@@ -336,11 +308,10 @@ public class FormHierarchyActivity extends ListActivity {
                                 + groupCount++, "", null, Color.LTGRAY, CHILD, currentIndex));
                         formList.add(group);
                     } else {
-                        Log.e("Carl", "no children, so skipping");
+                        Log.e(t, "no children, so skipping");
                     }
                     currentIndex = nextRelevantIndex(currentIndex);
                     continue;
-
                 }
             } else if (e instanceof QuestionDef) {
                 QuestionDef q = (QuestionDef) e;
@@ -351,7 +322,9 @@ public class FormHierarchyActivity extends ListActivity {
                 IAnswerData a = feb.getValue();
                 if (a != null) {
                     if (feb.instanceNode.dataType == Constants.DATATYPE_DATE) {
-                        answer = new SimpleDateFormat("MMM dd, yyyy").format((Date) ((DateData) a).getValue());
+                        answer =
+                                new SimpleDateFormat("MMM dd, yyyy").format((Date) ((DateData) a)
+                                        .getValue());
                     } else {
                         answer = a.getDisplayText();
                     }
@@ -371,7 +344,6 @@ public class FormHierarchyActivity extends ListActivity {
         HierarchyListAdapter itla = new HierarchyListAdapter(this);
         itla.setListItems(formList);
         setListAdapter(itla);
-
     }
 
 
@@ -398,11 +370,10 @@ public class FormHierarchyActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         HierarchyElement h = (HierarchyElement) l.getItemAtPosition(position);
-        Log.e("carl", "item is " + h.getPrimaryText());
 
         switch (h.getType()) {
             case EXPANDED:
-                Log.e("carl", "is expanded group, collapsing");
+                Log.i(t, "is expanded group, collapsing");
                 h.setType(COLLAPSED);
                 ArrayList<HierarchyElement> children = h.getChildren();
                 for (int i = 0; i < children.size(); i++) {
@@ -413,18 +384,17 @@ public class FormHierarchyActivity extends ListActivity {
                 h.setColor(Color.WHITE);
                 break;
             case COLLAPSED:
-                Log.e("carl", "is collapsed group, expanding");
+                Log.i(t, "is collapsed group, expanding");
                 h.setType(EXPANDED);
                 ArrayList<HierarchyElement> children1 = h.getChildren();
                 for (int i = 0; i < children1.size(); i++) {
-                    Log.e("Carl", "adding child: " + children1.get(i).getFormIndex());
+                    Log.i(t, "adding child: " + children1.get(i).getFormIndex());
                     formList.add(position + 1 + i, children1.get(i));
 
                 }
                 h.setIcon(getResources().getDrawable(R.drawable.expander_ic_maximized));
                 h.setSecondaryText(getString(R.string.expanded_group));
                 h.setColor(Color.LTGRAY);
-
                 break;
             case QUESTION:
                 // Toast.makeText(this, "Question", Toast.LENGTH_SHORT).show();
@@ -435,7 +405,6 @@ public class FormHierarchyActivity extends ListActivity {
                 // Toast.makeText(this, "CHILD", Toast.LENGTH_SHORT).show();
                 mCurrentIndex = h.getFormIndex();
                 mCurrentIndex = nextRelevantIndex(mCurrentIndex);
-                Log.e("carl", "clicked index was " + mCurrentIndex);
                 refreshView();
                 return;
         }
@@ -504,7 +473,6 @@ public class FormHierarchyActivity extends ListActivity {
                 }
             }
         }
-
         return relevant;
     }
 
@@ -521,22 +489,5 @@ public class FormHierarchyActivity extends ListActivity {
         else
             return false;
     }
-
-    // private boolean indexIsGroup(FormIndex index) {
-    // Vector<IFormElement> defs = getIndexVector(index);
-    // IFormElement last = (defs.size() == 0 ? null : (IFormElement)
-    // defs.lastElement());
-    // if (last instanceof GroupDef) {
-    // return true;
-    // } else {
-    // return false;
-    // }
-    // }
-    //
-    //
-    // private TreeElement resolveReferenceForCurrentIndex(FormIndex i) {
-    // return
-    // mForm.getDataModel().resolveReference(mForm.getChildInstanceRef(i));
-    // }
 
 }

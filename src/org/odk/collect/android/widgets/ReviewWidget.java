@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.logic.PromptElement;
 import org.odk.collect.android.logic.HCTSharedConstants;
+import org.odk.collect.android.logic.PromptElement;
 
 import android.content.Context;
 import android.util.TypedValue;

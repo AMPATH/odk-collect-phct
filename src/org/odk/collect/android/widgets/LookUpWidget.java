@@ -10,8 +10,8 @@ import org.javarosa.core.model.data.IAnswerData;
 import org.javarosa.core.model.data.StringData;
 import org.odk.collect.android.R;
 import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.PromptElement;
 import org.odk.collect.android.logic.HCTSharedConstants;
+import org.odk.collect.android.logic.PromptElement;
 
 import android.content.Context;
 import android.graphics.Color;

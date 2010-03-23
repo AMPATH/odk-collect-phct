@@ -24,18 +24,19 @@ import java.util.Calendar;
 import java.util.Vector;
 
 import org.javarosa.core.JavaRosaServiceProvider;
-import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.services.IService;
 import org.javarosa.model.xform.XFormsModule;
 import org.odk.collect.android.R;
 import org.odk.collect.android.database.FileDbAdapter;
 import org.odk.collect.android.listeners.FormLoaderListener;
+import org.odk.collect.android.listeners.FormSavedListener;
 import org.odk.collect.android.logic.FormHandler;
 import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.logic.HCTSharedConstants;
 import org.odk.collect.android.logic.PromptElement;
 import org.odk.collect.android.logic.PropertyManager;
 import org.odk.collect.android.tasks.FormLoaderTask;
+import org.odk.collect.android.tasks.SaveToDiskTask;
 import org.odk.collect.android.utilities.FileUtils;
 import org.odk.collect.android.utilities.GestureDetector;
 import org.odk.collect.android.views.QuestionView;
@@ -78,7 +79,7 @@ import android.widget.Toast;
  * @author Carl Hartung (carlhartung@gmail.com)
  */
 public class FormEntryActivity extends Activity implements AnimationListener,
-		FormLoaderListener {
+		FormLoaderListener, FormSavedListener {
 	private final String t = "FormEntryActivity";
 
 	private static final String FORMPATH = "formpath";
@@ -98,6 +99,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	
 
 	private static final int PROGRESS_DIALOG = 1;
+	private static final int SAVING_DIALOG = 2;
 
 	// private ProgressBar mProgressBar;
 	private String mFormPath;
@@ -118,6 +120,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	private boolean mBeenSwiped;
 
 	private FormLoaderTask mFormLoaderTask;
+	
+    private SaveToDiskTask mSaveToDiskTask;
 
 	enum AnimationType {
 		LEFT, RIGHT, FADE
@@ -503,8 +507,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					.setOnClickListener(new OnClickListener() {
 						public void onClick(View v) {
 							// Form is marked as 'done' here.
-							if (saveDataToDisk(true))
-								finish();
+							saveDataToDisk(true);
 						}
 					});
 			// Create 'save for later' button
@@ -512,8 +515,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					.setOnClickListener(new OnClickListener() {
 						public void onClick(View v) {
 							// Form is marked as 'saved' here.
-							if (saveDataToDisk(false))
-								finish();
+							saveDataToDisk(false);
 						}
 					});
 
@@ -756,7 +758,12 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 				case DialogInterface.BUTTON1: // yes, repeat
 					mFormHandler.newRepeat();
 					HCTSharedConstants.currentIndividual=null;
+					if (HCTSharedConstants.savedForm)
+						HCTSharedConstants.newIndivOnSavedForm = true;
+					else
+						HCTSharedConstants.newIndivOnSavedForm = false;
 					HCTSharedConstants.saveNames();
+					if (HCTSharedConstants.reviews != null) HCTSharedConstants.reviews.clear();
 					showNextView();
 					break;
 				case DialogInterface.BUTTON2: // no, no repeat
@@ -828,9 +835,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	/*
 	 * Called during a 'save and exit' command. The form is not 'done' here.
 	 */
-	private boolean saveDataToDisk(boolean markCompleted) {
+	private void saveDataToDisk(boolean markCompleted) {
 		HCTSharedConstants.finalizing=true;
-		if (!validateAnswers(markCompleted)) {
+		/** if (!validateAnswers(markCompleted)) {
 			return false;
 		}
 		mFormHandler.finalizeDataModel();
@@ -845,10 +852,15 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					getString(R.string.data_saved_error), Toast.LENGTH_LONG)
 					.show();
 			return false;
-		}
+		}*/
+		 mSaveToDiskTask = new SaveToDiskTask();
+        mSaveToDiskTask.setFormSavedListener(this);
+        mSaveToDiskTask.setExportVars(mInstancePath, getApplicationContext(), markCompleted);
+        mSaveToDiskTask.execute();
+        showDialog(SAVING_DIALOG);
 	}
 
-	// make sure this validates for all on done
+	/**make sure this validates for all on done
 	private boolean validateAnswers(boolean markCompleted) {
 		mFormHandler.setFormIndex(FormIndex.createBeginningOfFormIndex());
 		mFormHandler.nextQuestionPrompt();
@@ -866,7 +878,7 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		}
 
 		return true;
-	}
+	}*/
 
 	/**
 	 * Confirm save and quit dialog
@@ -880,9 +892,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
             saveStatus = saveCurrentAnswer(true);
         }
 
-        if (saveStatus && saveDataToDisk(markCompleted)) {
-            finish();
-        }
+        if (saveStatus)
+        	saveDataToDisk(markCompleted);
 	}
 
 	/**
@@ -914,6 +925,9 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 					}
 
 					fda.close();
+					
+					//Clear HCT Data
+					HCTSharedConstants.cleanUp();
 					finish();
 					break;
 				case DialogInterface.BUTTON2: // no
@@ -1059,6 +1073,23 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			mProgressDialog.setButton(getString(R.string.cancel),
 					loadingButtonListener);
 			return mProgressDialog;
+			
+		case SAVING_DIALOG:
+            mProgressDialog = new ProgressDialog(this);
+            /*DialogInterface.OnClickListener savingButtonListener =
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            mSaveToDiskTask.setFormSavedListener(null);
+                            mSaveToDiskTask.cancel(true);
+                        }
+                    };*/
+            mProgressDialog.setTitle(getString(R.string.saving_form));
+            mProgressDialog.setMessage(getString(R.string.please_wait));
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setCancelable(false);
+           // mProgressDialog.setButton(getString(R.string.cancel), savingButtonListener);
+            return mProgressDialog;
 		}
 		return null;
 	}
@@ -1213,5 +1244,25 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 			refreshCurrentView();
 		}
 	}
+	
+    public void savingComplete(int saveStatus) {
+        dismissDialog(SAVING_DIALOG);
+        switch (saveStatus) {
+            case SaveToDiskTask.SAVED:
+                Toast.makeText(getApplicationContext(), getString(R.string.data_saved_ok),
+                        Toast.LENGTH_SHORT).show();
+                finish();
+                break;
+            case SaveToDiskTask.SAVE_ERROR:
+                Toast.makeText(getApplicationContext(), getString(R.string.data_saved_error),
+                        Toast.LENGTH_LONG).show();
+                break;
+            case GlobalConstants.ANSWER_CONSTRAINT_VIOLATED:
+            case GlobalConstants.ANSWER_REQUIRED_BUT_EMPTY:
+                refreshCurrentView();
+                createConstraintToast(mFormHandler.currentPrompt(), saveStatus);
+                break;
+        }
+    }
 	
 }

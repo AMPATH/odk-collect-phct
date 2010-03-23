@@ -16,6 +16,13 @@
 
 package org.odk.collect.android.views;
 
+import org.javarosa.core.model.data.IAnswerData;
+import org.odk.collect.android.logic.GroupElement;
+import org.odk.collect.android.logic.PromptElement;
+import org.odk.collect.android.widgets.IBinaryWidget;
+import org.odk.collect.android.widgets.IQuestionWidget;
+import org.odk.collect.android.widgets.WidgetFactory;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.util.Log;
@@ -25,13 +32,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import org.javarosa.core.model.data.IAnswerData;
-import org.odk.collect.android.logic.GroupElement;
-import org.odk.collect.android.logic.PromptElement;
-import org.odk.collect.android.widgets.IBinaryWidget;
-import org.odk.collect.android.widgets.IQuestionWidget;
-import org.odk.collect.android.widgets.WidgetFactory;
 
 
 /**

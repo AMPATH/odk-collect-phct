@@ -16,12 +16,6 @@
 
 package org.odk.collect.android.tasks;
 
-import android.os.AsyncTask;
-
-import org.odk.collect.android.listeners.FormDownloaderListener;
-import org.odk.collect.android.logic.GlobalConstants;
-import org.odk.collect.android.logic.HCTSharedConstants;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,6 +25,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+
+import org.odk.collect.android.listeners.FormDownloaderListener;
+import org.odk.collect.android.logic.GlobalConstants;
+import org.odk.collect.android.logic.HCTSharedConstants;
+
+import android.os.AsyncTask;
 
 /**
  * Background task for downloading forms from a url.

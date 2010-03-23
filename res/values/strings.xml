@@ -136,6 +136,7 @@
 	<string name="change_language">Change Language</string>
 
 	<string name="saved_data">Incomplete (%s)</string>
+	<string name="saving_form">Saving Form</string>
 	<string name="completed_data">Completed (%s)</string>
 	<string name="submitted_data">Submitted</string>
 	<string name="local_files">Local</string>

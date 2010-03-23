@@ -16,19 +16,19 @@
 
 package org.odk.collect.android.widgets;
 
-import android.content.Context;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.text.method.DigitsKeyListener;
-import android.util.AttributeSet;
-import android.util.TypedValue;
+import java.text.NumberFormat;
 
 import org.javarosa.core.model.data.DecimalData;
 import org.javarosa.core.model.data.IAnswerData;
 import org.odk.collect.android.logic.GlobalConstants;
 import org.odk.collect.android.logic.PromptElement;
 
-import java.text.NumberFormat;
+import android.content.Context;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.text.method.DigitsKeyListener;
+import android.util.AttributeSet;
+import android.util.TypedValue;
 
 /**
  * A widget that restricts values to floating point numbers.

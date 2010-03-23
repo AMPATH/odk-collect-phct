@@ -16,6 +16,8 @@
 
 package org.odk.collect.android.logic;
 
+import java.util.Vector;
+
 import org.javarosa.core.model.FormDef;
 import org.javarosa.core.model.FormIndex;
 import org.javarosa.core.model.QuestionDef;
@@ -26,8 +28,6 @@ import org.javarosa.core.util.OrderedHashtable;
 import org.javarosa.formmanager.view.FormElementBinding;
 import org.odk.collect.android.activities.FormEntryActivity;
 import org.odk.collect.android.views.QuestionView;
-
-import java.util.Vector;
 
 /**
  * Used by {@link QuestionView} to display Questions and by {@link FormEntryActivity} to
