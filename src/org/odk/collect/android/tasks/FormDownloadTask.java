@@ -114,8 +114,15 @@ public class FormDownloadTask extends AsyncTask<String, Integer, ArrayList<Strin
                 
                 f = new File(path);
                 while (f.exists()) {
-                    f = new File(base + "/" + filename + " " + i + "." + ext);
-                    i++;
+                	//for special files delete existing TODO: Bad habit
+                	if (name.matches(GlobalConstants.VALID_FILENAME)){
+                		f = new File(base + "/" + filename + " " + i + "." + ext);
+                		i++;
+                	}else {
+                		//allow overwrite by deleting the old one
+                		f.renameTo(new File(base + "/" + filename + "-" + i + ".bak"));
+                		i++;
+                	}
                 }
 
             }

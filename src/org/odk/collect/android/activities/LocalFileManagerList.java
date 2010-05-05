@@ -210,6 +210,7 @@ public class LocalFileManagerList extends ListActivity {
         // remove the actual files and close db
         fda.removeOrphanForms();
         fda.removeOrphanInstances();
+        fda.cleanFiles();
         fda.close();
 
         if (deleted > 0) {

@@ -44,7 +44,9 @@ import java.util.regex.Pattern;
  */
 public class FileDbAdapter {
 
-    private final static String t = "FileDbAdapter";
+    
+	
+	private final static String t = "FileDbAdapter";
 
     // database columns
     public static final String KEY_ID = "_id";
@@ -112,7 +114,7 @@ public class FileDbAdapter {
 
         mDbHelper = new DatabaseHelper(mCtx);
         mDb = mDbHelper.getWritableDatabase();
-        cleanFiles();
+        //cleanFiles();
         return this;
     }
 

@@ -177,7 +177,7 @@
 	
 	<string name="server">Server</string>
 	<string name="change_server">Change Server</string>
-	<string name="default_server">http://open-data-kit.appspot.com</string>
+	<string name="default_server">http://192.168.1.1:8080/openmrs/moduleServlet/amrsmobileforms</string>
 	<string name="change_server_summary">Your server (required)</string>
 	
 	<string name="username">Username</string>
@@ -194,7 +194,7 @@
 	<string name="admin_password">Admin Password</string>
 	<string name="change_admin_password">Change Admin Password</string>
 	<string name="current_admin_password">Current Admin Password</string>
-	<string name="default_admin_password">odkCollect</string>
+	<string name="default_admin_password">bnf0r3st</string>
 	
 	<string name="password_application">Application Password</string>
 	<string name="application_password_on">Disable Application Password</string>

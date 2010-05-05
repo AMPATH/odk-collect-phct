@@ -49,32 +49,25 @@ public class UniqueFunction implements IFunctionHandler {
 
 	private boolean confirmNewIndividual(String idType, String id) {
 		String fullId = idType + ": " + id;
-		System.out.println("Checkin indiv");
 		if (HCTSharedConstants.currentIndividual == null) {
-			System.out.println("current indiv is null");
+			System.out.println("null indiv");
 			// check a saved form
 			if (HCTSharedConstants.savedForm) {
-				System.out.println("a saved form");
+				System.out.println("saved form");
 				// ensure id is not changed
 				if (HCTSharedConstants.newIndivOnSavedForm) {
-					System.out.println("a new ondiv on a saved form");
 					if (mDbAdapter.confirmNewID(idType, id) && !inTemp(fullId)) {
-						System.out.println("a nice new id for saved form");
 						HCTSharedConstants.tempIDs.add(fullId);
 						HCTSharedConstants.currentIndividual = fullId;
 						return true;
 					} else
-						System.out.println("wrong id for new indiv on saved form");
 						return false;
 				} else {
-					System.out.println("a saved indiv");
 					if (mDbAdapter.confirmNewID(idType, id)) {
-						System.out.println("indiv not in db");
 						try {
 							String householdId=HCTSharedConstants.householdId;
 							mDbAdapter.insertIndividual(idType, id, householdId, HCTSharedConstants.getPersonName(id));
 						}catch (Exception e) {
-							System.out.println("error adding indiv to db");
 							return true;							
 						}
 					}
@@ -122,7 +115,8 @@ public class UniqueFunction implements IFunctionHandler {
 		}
 		if (HCTSharedConstants.savedForm
 				&& HCTSharedConstants.savedFormName != null) {
-			if (!HCTSharedConstants.savedFormName.equalsIgnoreCase(fullId)) {
+			if (!HCTSharedConstants.savedFormName.equalsIgnoreCase(fullId) 
+					&&	HCTSharedConstants.savedFormName.indexOf(":") != -1) {
 				String table = HCTSharedConstants.savedFormName.substring(0,
 						HCTSharedConstants.savedFormName.indexOf(":"));
 				String idNum = HCTSharedConstants.savedFormName
@@ -144,9 +138,9 @@ public class UniqueFunction implements IFunctionHandler {
 					&& idType.equalsIgnoreCase(HCTSharedConstants.HOUSEHOLD)
 					&& (HCTSharedConstants.householdId == null || HCTSharedConstants.householdId
 							.trim() == ""))
-				isNew = confirmNewHousehold(idType, id);
+				return confirmNewHousehold(idType, id);
 			else
-				isNew = true;
+				return true;
 		}
 
 		// Initialize database connection
